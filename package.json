@@ -1,0 +1,46 @@
+{
+  "name": "perfectlyy_placed-backend-v2",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Perfectly Placed Backend Version2",
+  "main": "src/app.js",
+  "scripts": {
+    "build": "rimraf build && babel ./src -d build --copy-files",
+    "start": "rimraf build && npm run build && node build/app.js",
+    "dev": "nodemon --exec babel-node ./src/app.js",
+    "make:migration": "knex migrate:make --migrations-directory ./src/db/migrations",
+    "migrate": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./src/db/knexfile.js --migrations-directory migrations",
+    "rollback": "node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:rollback --knexfile ./src/db/knexfile.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-node": "^0.0.1-security",
+    "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "^4.18.2",
+    "express-http-context": "^1.2.4",
+    "express-validator": "^6.14.2",
+    "http-errors": "~1.6.3",
+    "http-status-codes": "^2.2.0",
+    "joi": "^17.10.1",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "pino": "^8.19.0",
+    "pino-pretty": "^10.3.1",
+    "stripe": "^14.17.0",
+    "uuid": "^9.0.0",
+    "uuidv4": "^6.2.13",
+    "validator": "^13.7.0",
+    "validatorjs": "^3.22.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
