@@ -6,12 +6,10 @@ const { Knex } = knex;
  * @returns {Knex.SchemaBuilder}
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('users', function(table) {
+    return knex.schema.createTable('products', function(table) {
         table.increments('id').primary();
         table.string('name').notNullable();
-        table.string('email').notNullable().unique();
-        table.string('password').notNullable();
-        table.string('stripe_customer_id').notNullable().unique();
+        table.text('description').notNullable();
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };
@@ -21,5 +19,5 @@ exports.up = function(knex) {
  * @returns {Knex.SchemaBuilder}
  */
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('users');
+    return knex.schema.dropTableIfExists('products');
 };

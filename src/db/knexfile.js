@@ -1,12 +1,5 @@
 import { config } from 'dotenv';
-import path from 'path';
-
 config();
-
-// Define a function to resolve the migrations' directory path
-const resolveMigrationPath = (dir) => {
-  return path.resolve(__dirname, dir);
-};
 
 const knexConfig = {
 
@@ -19,6 +12,9 @@ const knexConfig = {
       password: String(process.env.PG_PASSWORD),
       database: process.env.PG_DB,
     },
+    migrations: {
+      extension: 'cjs'
+    }
   },
 
   production: {
