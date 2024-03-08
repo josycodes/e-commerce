@@ -14,6 +14,8 @@ exports.up = function(knex) {
         table.text('city').notNullable();
         table.text('state').notNullable();
         table.text('postal_code').notNullable();
+        table.decimal('latitude', 10, 7); // Precision: 10, Scale: 7
+        table.decimal('longitude', 10, 7); // Precision: 10, Scale: 7
         table.text('country').notNullable();
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
