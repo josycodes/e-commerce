@@ -6,11 +6,12 @@ const { Knex } = knex;
  * @returns {Knex.SchemaBuilder}
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('admin', function(table) {
+    return knex.schema.createTable('orders', function(table) {
         table.increments('id').primary();
-        table.string('name').notNullable();
-        table.string('email').notNullable().unique();
-        table.string('verification').notNullable();
+        table.integer('user_id').references('id').inTable('users');
+        table.decimal('total_amount', 10, 2).notNullable();
+        table.integer('shipping_address_id').references('id').inTable('shipping_addresses');
+        table.string('payment_status').notNullable().defaultTo('processing');
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };
@@ -20,5 +21,5 @@ exports.up = function(knex) {
  * @returns {Knex.SchemaBuilder}
  */
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('admin');
+    return knex.schema.dropTableIfExists('orders');
 };
