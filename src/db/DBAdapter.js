@@ -38,7 +38,7 @@ export default class DBAdapter {
         }
     }
 
-    async updateAndFetch(table, options = {}, data = {}){
+    async updateAndFetch(table, options, data){
         try{
             LoggerLib.log('updateAndFetch', { table, options, data });
             const [updated] = await this.db(table).where(options).returning('id').update(data);
@@ -49,7 +49,7 @@ export default class DBAdapter {
         }
     }
 
-    async findOne(table, options = {}){
+    async findOne(table, options){
         try{
             LoggerLib.log('find', {table, options});
             return await this.db(table).where(options).first();
@@ -66,6 +66,16 @@ export default class DBAdapter {
         }
         catch (error) {
             throw new ErrorLib('Error finding data' + error.message);
+        }
+    }
+
+    async delete(table, options){
+        try{
+            LoggerLib.log('delete', {table, options});
+            return await this.db(table).where(options).del();
+        }
+        catch (error) {
+            throw new ErrorLib('Error deleting data' + error.message);
         }
     }
 }

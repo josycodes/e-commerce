@@ -6,7 +6,7 @@ export default class AdminMapper {
                 name: data.name,
                 email: data.email
             },
-            token: data.token
+            token: data.token ? data.token : null
         }
     }
 }
