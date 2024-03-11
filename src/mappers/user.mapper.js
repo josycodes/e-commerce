@@ -4,9 +4,10 @@ export default class UserMapper {
             user: {
                 id: data.id,
                 name: data.name,
-                email: data.email
+                email: data.email,
+                phone: data.phone
             },
-            token: data.token
+            token: data.token ? data.token : null
         }
     }
 }

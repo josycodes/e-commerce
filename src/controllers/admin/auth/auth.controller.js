@@ -10,7 +10,7 @@ export const login = async (req, res, next) => {
         const { email, password } = req.body;
         const user = await authService.findUserByEmail(email);
         await authService.validateUserPassword(password, user.verification);
-        const token = await authService.generateUserToken(user);
+        const token = await authService.generateUserToken(user, 'admin');
 
         return new ResponseLib(req, res).json({
             status: true,
