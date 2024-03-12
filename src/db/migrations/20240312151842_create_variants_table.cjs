@@ -1,16 +1,16 @@
 const knex = require('knex');
 const { Knex } = knex;
+
 /**
  * @param { import("knex").Knex } knex
  * @returns {Knex.SchemaBuilder}
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('product_variants', function(table) {
+    return knex.schema.createTable('variants', function(table) {
         table.increments('id').primary();
-        table.integer('product_id').unsigned().notNullable().references('id').inTable('products');
-        table.json('variant_id');
-        table.decimal('price', 10, 2).notNullable();
-        table.integer('stock').notNullable().defaultTo(0);
+        table.string('type').notNullable();
+        table.string('value').notNullable();
+        table.integer('category_id').notNullable().references('id').inTable('categories');
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };
@@ -20,5 +20,5 @@ exports.up = function(knex) {
  * @returns {Knex.SchemaBuilder}
  */
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('product_variants');
+    return knex.schema.dropTableIfExists('variants');
 };
