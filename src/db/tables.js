@@ -8,6 +8,7 @@ export const TABLE = {
     ORDER_ITEM: 'order_items',
     CART_ITEM: 'cart_items',
     PRODUCT_VARIANT: 'product_variants',
-    PAYMENT: 'payments'
-
+    PAYMENT: 'payments',
+    VARIANT: 'variants',
+    CATEGORY: 'categories'
 };

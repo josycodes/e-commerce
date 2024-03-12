@@ -1,7 +1,7 @@
 import { BadRequest, NotFound } from "../../../libs/Error.lib.js";
 import ResponseLib from "../../../libs/Response.lib.js";
 import AuthService from "../../../services/auth.service.js";
-import {TABLE} from "../../../db/tables.js";
+import { TABLE } from "../../../db/tables.js";
 import AdminMapper from "../../../mappers/admin.mapper.js";
 
 export const login = async (req, res, next) => {

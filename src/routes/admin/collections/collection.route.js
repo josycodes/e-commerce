@@ -19,14 +19,14 @@ router.post(
     create
 );
 
-//Get All COllections
+//Get All Collections
 router.get('/all', getAll);
 
 //Edit Collection
 router.post('/remove/:collection_id',
     celebrate({
         [Segments.PARAMS]: Joi.object({
-            collection_id: Joi.number().positive()
+            collection_id: Joi.number().positive().required()
         }),
     }),
     celebrate({

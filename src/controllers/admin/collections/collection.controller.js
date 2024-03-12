@@ -14,7 +14,7 @@ export const create = async (req, res, next) => {
 
         return new ResponseLib(req, res).json({
             status: true,
-            message: "Login Successful",
+            message: "Collection Created",
             data: CollectionMapper.toDTO(createdCollection)
         });
     } catch (error) {
