@@ -1,11 +1,12 @@
-import ErrorLib, { BadRequest, NotFound } from "../../../libs/Error.lib";
-import ResponseLib from "../../../libs/Response.lib";
+import ErrorLib, { BadRequest, NotFound } from "../../../libs/Error.lib.js";
+import ResponseLib from "../../../libs/Response.lib.js";
 import AuthService from "../../../services/auth.service.js";
 import UserService from "../../../services/user.service.js";
 import {TABLE} from "../../../db/tables.js";
 import UserMapper from "../../../mappers/user.mapper.js";
 import StripeIntegration from "../../../integrations/stripe.integration.js";
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
 export const register = async (req, res, next) => {
     const authService = new AuthService(TABLE.USER);
