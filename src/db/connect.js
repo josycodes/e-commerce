@@ -2,12 +2,9 @@ import knex from "knex";
 import knexFile from "./knexfile.js";
 import LoggerLib from '../libs/Logger.lib.js';
 import { config } from 'dotenv';
-import bookshelf from 'bookshelf';
 config();
 
 export const db = knex(knexFile[process.env.NODE_ENV]);
-
-export const dbORM = bookshelf(db);
 
 export const connectDB = () => {
 

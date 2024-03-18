@@ -15,7 +15,10 @@ export const login = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Login Successful",
-            data: AdminMapper.toDTO({ ...user, token })
+            data: AdminMapper.toDTO({
+                user: user,
+                token: token
+            })
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest) {
