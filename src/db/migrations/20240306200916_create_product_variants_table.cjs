@@ -11,7 +11,9 @@ exports.up = function(knex) {
         table.json('variant_id');
         table.decimal('price', 10, 2).notNullable();
         table.integer('stock').notNullable().defaultTo(0);
-        table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
+        table.string('image').nullable();
+        table.string('video').nullable();
+        table.timestamps(true, true);
     });
 };
 

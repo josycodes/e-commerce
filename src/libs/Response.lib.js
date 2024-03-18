@@ -13,7 +13,7 @@ export default class ResponseLib {
   }
 
   json(data) {
-    this._res.statusCode = this._res.statusCode ?? 200;
+    this._res.statusCode = (this._res.statusCode !== undefined && this._res.statusCode !== null) ? this._res.statusCode : 200;
     LoggerLib.log('API Response:', {
       url: this._req.url,
       method: this._req.method,
