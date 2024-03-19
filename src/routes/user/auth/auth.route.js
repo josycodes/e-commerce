@@ -1,4 +1,5 @@
-import { router } from '../../../middleware/app.middleware.js';
+import express from "express";
+const router = express.Router();
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 import { register, login } from "../../../controllers/user/auth/auth.controller.js";

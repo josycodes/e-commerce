@@ -10,6 +10,7 @@ exports.up = function(knex) {
         table.increments('id').primary();
         table.string('name').notNullable();
         table.text('description').notNullable();
+        table.boolean('published').defaultTo('true');
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };

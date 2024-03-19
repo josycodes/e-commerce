@@ -1,7 +1,7 @@
 export default class VariantMapper {
     static toDTO(data) {
         return {
-            user: {
+            data: {
                 id: data.id,
                 type: data.type,
                 value: data.value

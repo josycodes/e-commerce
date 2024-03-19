@@ -1,10 +1,11 @@
-import { router } from '../../../middleware/app.middleware.js';
 import  { authorizeRequest } from "../../../middleware/authentication.middleware.js";
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 import {create, edit, getAll, remove} from "../../../controllers/admin/collections/collection.controller.js";
+import express from "express";
+const router = express.Router();
 
-router.use(authorizeRequest);
+// router.use(authorizeRequest);
 
 //Create Collection
 router.post(
@@ -23,7 +24,7 @@ router.post(
 router.get('/all', getAll);
 
 //Edit Collection
-router.post('/remove/:collection_id',
+router.post('/edit/:collection_id',
     celebrate({
         [Segments.PARAMS]: Joi.object({
             collection_id: Joi.number().positive().required()

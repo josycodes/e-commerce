@@ -9,7 +9,7 @@ export default class CollectionService{
     }
 
     async createCollection(options){
-        return await this.dbInstance.create(this.table, options);
+        return await this.dbInstance.createAndFetch(this.table, options);
     }
 
     async getAllCollections(){

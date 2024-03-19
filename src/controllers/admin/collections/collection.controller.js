@@ -15,7 +15,7 @@ export const create = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Collection Created",
-            data: CollectionMapper.toDTO(createdCollection)
+            data: CollectionMapper.toDTO({...createdCollection})
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest) {
@@ -30,7 +30,7 @@ export const getAll = async (req, res, next) => {
     try {
         const collections = await collectionService.getAllCollections();
         const collectionsDTO = await Promise.all(collections.map(async (collection) => {
-            return CollectionMapper.toDTO(collection);
+            return CollectionMapper.toDTO({...collection});
         }));
 
         return new ResponseLib(req, res).json({

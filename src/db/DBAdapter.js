@@ -1,4 +1,4 @@
-import { db } from './connect.js';
+import {db} from './connect.js';
 import ErrorLib from '../libs/Error.lib.js';
 import LoggerLib from "../libs/Logger.lib.js";
 
@@ -66,6 +66,15 @@ export default class DBAdapter {
         }
         catch (error) {
             throw new ErrorLib('Error finding data' + error.message);
+        }
+    }
+
+    async getTotalOfColumn(table, columnName, options) {
+        try {
+            const result = await this.db(table).sum(columnName).where(options);
+            return result[Object.keys(result)[0]];
+        } catch (error) {
+            throw new ErrorLib('Error occurred while getting total: ' + error.message);
         }
     }
 

@@ -16,14 +16,14 @@ export const login = async (req, res, next) => {
             status: true,
             message: "Login Successful",
             data: AdminMapper.toDTO({
-                user: user,
-                token: token
+                user,
+                token
             })
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest) {
             return next(new BadRequest('Wrong credentials'))
         }
-        next(error)
+        // next(error)
     }
 }
