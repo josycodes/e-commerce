@@ -10,8 +10,9 @@ exports.up = function(knex) {
         table.integer('product_id').unsigned().notNullable().references('id').inTable('products');
         table.json('variant_id');
         table.decimal('price', 10, 2).notNullable();
+        table.decimal('sale_price', 10, 2).notNullable();
         table.integer('stock').notNullable().defaultTo(0);
-        table.string('image').nullable();
+        table.json('image').nullable();
         table.string('video').nullable();
         table.timestamps(true, true);
     });

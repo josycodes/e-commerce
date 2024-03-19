@@ -2,9 +2,9 @@ export default class AdminMapper {
     static toDTO(data) {
         return {
             user: {
-                id: data.id,
-                name: data.name,
-                email: data.email
+                id: data.user.id,
+                name: data.user.name,
+                email: data.user.email
             },
             token: data.token ? data.token : null
         }

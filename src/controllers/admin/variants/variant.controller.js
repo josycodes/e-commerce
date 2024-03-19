@@ -15,15 +15,18 @@ export const create = async (req, res, next) => {
     const variantService = new VariantService();
     try {
         const { type, value, category_id } = req.body;
+        //check if variant exist
+        const check = await variantService.findVariant({type, value});
+        if (check) throw new ErrorLib('Variant already exists');
 
         const createdVariant = await variantService.createVariant({
-            type, value, category_id
+            type, value
         });
 
         return new ResponseLib(req, res).json({
             status: true,
             message: "Variant Created",
-            data: VariantMapper.toDTO(createdVariant)
+            data: VariantMapper.toDTO({...createdVariant})
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest) {

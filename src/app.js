@@ -21,7 +21,7 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
     LoggerLib.error(err);
-    let message = 'Server Error', statusCode = 500;
+    let message = err.message, statusCode = 500;
     if (err instanceof ErrorLib) {
         message = err.message;
         statusCode = err.code;

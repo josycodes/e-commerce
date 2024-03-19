@@ -1,13 +1,11 @@
-import express from 'express';
 import httpContext from 'express-http-context';
 import LoggerLib from '../libs/Logger.lib.js';
 import { v4 as uuidv4 } from 'uuid';
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import express from "express";
 
 const app = express();
-const router = express.Router();
 
 // Middleware
 app.use(express.json());
@@ -35,4 +33,4 @@ app.use((req, res, next) => {
     next(); // Call the next middleware
 });
 
-export { app, router };
+export { app };

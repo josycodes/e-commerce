@@ -1,9 +1,9 @@
-import { router } from '../../../middleware/app.middleware.js';
 import  { authorizeRequest } from "../../../middleware/authentication.middleware.js";
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 import { create, all } from "../../../controllers/admin/variants/variant.controller.js";
-
+import express from "express";
+const router = express.Router();
 router.use(authorizeRequest);
 
 router.post('/add',

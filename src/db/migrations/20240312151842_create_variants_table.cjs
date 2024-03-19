@@ -10,7 +10,6 @@ exports.up = function(knex) {
         table.increments('id').primary();
         table.string('type').notNullable();
         table.string('value').notNullable();
-        table.integer('category_id').notNullable().references('id').inTable('categories');
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };
