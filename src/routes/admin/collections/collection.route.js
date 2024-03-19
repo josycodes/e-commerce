@@ -5,7 +5,7 @@ import {create, edit, getAll, remove} from "../../../controllers/admin/collectio
 import express from "express";
 const router = express.Router();
 
-// router.use(authorizeRequest);
+router.use(authorizeRequest);
 
 //Create Collection
 router.post(

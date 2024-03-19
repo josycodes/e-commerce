@@ -13,7 +13,7 @@ export default class DBAdapter {
             return await this.db(table).insert(data);
         }
         catch (error) {
-            throw new ErrorLib('Error creating data' + error.message);
+            throw new ErrorLib('Error creating data ' + error.message);
         }
     }
 
@@ -24,7 +24,7 @@ export default class DBAdapter {
             return await this.db(table).where({ id: created.id }).first();
         }
         catch (error) {
-            throw new ErrorLib('Error creating and fetching data' + error.message);
+            throw new ErrorLib('Error creating and fetching data ' + error.message);
         }
     }
 
@@ -34,7 +34,7 @@ export default class DBAdapter {
             return await this.db(table).where(options).update(data);
         }
         catch (error) {
-            throw new ErrorLib('Error updating data' + error.message);
+            throw new ErrorLib('Error updating data ' + error.message);
         }
     }
 
@@ -45,7 +45,7 @@ export default class DBAdapter {
             return await this.db.where({ id: updated.id }).first();
         }
         catch (error) {
-            throw new ErrorLib('Error updating and fetching data' + error.message);
+            throw new ErrorLib('Error updating and fetching data ' + error.message);
         }
     }
 
@@ -55,7 +55,7 @@ export default class DBAdapter {
             return await this.db(table).where(options).first();
         }
         catch (error) {
-            throw new ErrorLib('Error finding data' + error.message);
+            throw new ErrorLib('Error finding data ' + error.message);
         }
     }
 
@@ -65,7 +65,27 @@ export default class DBAdapter {
             return await this.db(table).where(options);
         }
         catch (error) {
-            throw new ErrorLib('Error finding data' + error.message);
+            throw new ErrorLib('Error finding data ' + error.message);
+        }
+    }
+
+    async findAndCount(table,options= {}){
+        try{
+            LoggerLib.log('findAndCount', {table, options});
+            return await this.db(table).count('*').where(options);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding and counting data ' + error.message);
+        }
+    }
+
+    async findWhereIn(table, columnName, data= []){
+        try{
+            LoggerLib.log('findWhereIn', {table, columnName, data});
+            return await this.db(table).whereIn(columnName,data);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding data WhereIn ' + error.message);
         }
     }
 
@@ -75,6 +95,14 @@ export default class DBAdapter {
             return result[Object.keys(result)[0]];
         } catch (error) {
             throw new ErrorLib('Error occurred while getting total: ' + error.message);
+        }
+    }
+
+    async queryRaw(table, columnName, operator,value){
+        try{
+            return await this.db(table).where(columnName, operator, value);
+        }catch (error) {
+            throw new ErrorLib('Error occurred while getting Raq Query: ' + error.message);
         }
     }
 

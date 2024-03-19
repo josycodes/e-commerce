@@ -1,5 +1,5 @@
 import DBAdapter from "../db/DBAdapter.js";
-import { TABLE } from "../db/tables.js";
+import {TABLE} from "../db/tables.js";
 
 export default class ProductVariantService{
     constructor() {
@@ -17,5 +17,27 @@ export default class ProductVariantService{
 
     async getTotalStock(column_name, options){
         return this.dbInstance.getTotalOfColumn(this.table,column_name, options);
+    }
+
+    async filterQuery(options){
+        const results = [];
+
+        if (options.max_price !== undefined) {
+            const query1 = await this.dbInstance.queryRaw(this.table, 'price', '<', options.max_price);
+            results.push(query1);
+        }
+
+        if (options.min_price !== undefined) {
+            const query2 = await this.dbInstance.queryRaw(this.table,'price', '>', options.min_price);
+            results.push(query2);
+        }
+
+        // Execute all queries concurrently
+        const mergedResults = await Promise.all(results);
+
+        // Merge the results
+        return mergedResults.reduce((acc, result) => {
+            return acc.concat(result);
+        }, []);
     }
 }

@@ -4,7 +4,7 @@ import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 const router = express.Router();
 
-import { create, getProduct, getAll } from "../../../controllers/admin/products/product.controller.js";
+import { create, getProduct, getAll, filterProducts } from "../../../controllers/admin/products/product.controller.js";
 
 router.use(authorizeRequest);
 
@@ -20,5 +20,16 @@ router.get('/id/:product_id',
     getProduct);
 
 router.get('/all', getAll);
+
+router.post('/filter',
+    celebrate({
+        [Segments.BODY]: Joi.object({
+            min_price: Joi.number().positive().optional(),
+            max_price: Joi.number().positive().optional(),
+            collection_id: Joi.array().optional(),
+            published_status: Joi.boolean().optional()
+        }),
+    }),
+    filterProducts);
 
 export default router;
