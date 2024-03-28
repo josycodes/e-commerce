@@ -12,5 +12,8 @@ export const TABLE = {
     VARIANT: 'variants',
     CATEGORY: 'categories',
     PRODUCT_COLLECTION: 'product_collections',
-
+    GENERAL_SHIPPING: 'general_shipping',
+    PAYMENT_OPTION: 'payment_options',
+    SALES_LOCATION: 'sales_location',
+    PROMOTIONS: 'promotions'
 };

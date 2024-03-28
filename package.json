@@ -1,9 +1,9 @@
 {
   "name": "perfectlyy_placed-backend-v2",
   "version": "1.0.0",
-  "type": "module",
   "description": "Perfectly Placed Backend Version2",
   "main": "src/app.js",
+  "type": "module",
   "scripts": {
     "build": "rimraf build && babel ./src -d build --copy-files",
     "start": "rimraf build && npm run build && node build/app.js",
@@ -46,10 +46,13 @@
     "validatorjs": "^3.22.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.22.15",
-    "@babel/core": "^7.22.15",
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.3",
     "@babel/node": "^7.22.15",
-    "@babel/preset-env": "^7.22.15",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.1",
+    "@babel/plugin-transform-runtime": "^7.24.3",
+    "@babel/preset-env": "^7.24.3",
+    "@babel/runtime": "^7.24.1",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1"
   }
