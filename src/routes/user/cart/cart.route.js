@@ -2,22 +2,21 @@ import express from "express";
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 const router = express.Router();
-import {filterProducts, getAll, getProduct} from "../../../controllers/user/products/product.controller.js";
 import {authorizeRequest} from "../../../middleware/authentication.middleware.js";
+import {addToCart} from "../../../controllers/user/cart/cart.controller.js";
 router.use(authorizeRequest);
 
 router.post('/add',
     celebrate({
         [Segments.BODY]: Joi.object({
             product_id: Joi.number(),
-            variant_id: Joi.number(),
-            quantity: Joi.number(),
-            amount: Joi.number()
+            product_variant_id: Joi.number(),
+            quantity: Joi.number()
         }),
     }),
     addToCart);
 
-router.post('/list', filterProducts);
+router.post('/list', listCartItems);
 
 router.post('/:cart_id',
     celebrate({
@@ -27,7 +26,7 @@ router.post('/:cart_id',
             collection_id: Joi.array().optional()
         }),
     }),
-    filterProducts);
+    getCartItem);
 
 router.post('/:cart_id/update',
     celebrate({
@@ -37,7 +36,7 @@ router.post('/:cart_id/update',
             collection_id: Joi.array().optional()
         }),
     }),
-    filterProducts);
+    updateCartItem);
 
 router.post('/:cart_id/remove',
     celebrate({
@@ -47,6 +46,6 @@ router.post('/:cart_id/remove',
             collection_id: Joi.array().optional()
         }),
     }),
-    filterProducts);
+    removeCartItem);
 
 export default router;

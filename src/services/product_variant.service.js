@@ -11,6 +11,10 @@ export default class ProductVariantService{
         return await this.dbInstance.createAndFetch(this.table, options);
     }
 
+    async findProductVariant(options){
+        return await this.dbInstance.findOne(this.table, options);
+    }
+
     async findVariants(options){
         return await this.dbInstance.findAll(this.table, options);
     }
@@ -23,12 +27,12 @@ export default class ProductVariantService{
         const results = [];
 
         if (options.max_price !== undefined) {
-            const query1 = await this.dbInstance.queryRaw(this.table, 'price', '<', options.max_price);
+            const query1 = await this.dbInstance.queryRaw(this.table, 'sale_price', '<', options.max_price);
             results.push(query1);
         }
 
         if (options.min_price !== undefined) {
-            const query2 = await this.dbInstance.queryRaw(this.table,'price', '>', options.min_price);
+            const query2 = await this.dbInstance.queryRaw(this.table,'sale_price', '>', options.min_price);
             results.push(query2);
         }
 

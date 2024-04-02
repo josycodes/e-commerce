@@ -3,10 +3,10 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('product_collections', function(table) {
+    return knex.schema.createTable('product_categories', function(table) {
         table.increments('id').primary();
         table.integer('product_id').references('id').inTable('products');
-        table.integer('collection_id').references('id').inTable('collections');
+        table.integer('category_id').references('id').inTable('categories');
         table.timestamps(true, true);
     });
 };
@@ -16,5 +16,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('product_collections');
+    return knex.schema.dropTableIfExists('product_categories');
 };

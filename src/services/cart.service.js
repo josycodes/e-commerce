@@ -3,7 +3,7 @@ import {TABLE} from "../db/tables.js";
 import ProductVariantService from "./product_variant.service.js";
 import VariantService from "./variant.service.js";
 
-export default class ProductService{
+export default class CartService{
     constructor() {
         this.dbInstance = new DBAdapter();
         this.table = TABLE.PRODUCT

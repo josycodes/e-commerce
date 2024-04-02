@@ -9,9 +9,8 @@ exports.up = function(knex) {
         table.increments('id').primary();
         table.integer('product_id').unsigned().references('id').inTable('products');
         table.integer('user_id').unsigned().references('id').inTable('users');
-        table.json('variant_id');
+        table.integer('product_variant_id').references('id').inTable('product_variants');
         table.integer('quantity').notNullable().defaultTo(1);
-        table.decimal('amount', 10, 2).notNullable();
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };
