@@ -14,10 +14,13 @@ export const register = async (req, res, next) => {
     const Stripe = new StripeIntegration();
     try{
         const { full_name, email,phone, password } = req.body;
+
+        //find User
         const user = await authService.findUserByEmail(email);
+        const userWithPhone = await userService.findUser({phone});
         const salt = await bcrypt.genSalt(10);
         const hash_password = await bcrypt.hash(password, salt);
-        if(user){
+        if(user || userWithPhone){
             throw new ErrorLib('User already exists', 400);
         }else{
             // create User on Stripe
@@ -38,7 +41,7 @@ export const register = async (req, res, next) => {
                 return new ResponseLib(req, res).json({
                     status: true,
                     message: "Registration Successful",
-                    data: UserMapper.toDTO({ createdUser })
+                    data: UserMapper.toDTO(createdUser)
                 });
             }else{
                 throw new ErrorLib('Stripe Registration');
@@ -55,13 +58,14 @@ export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await authService.findUserByEmail(email);
+        if(!user) throw BadRequest('User not found')
         await authService.validateUserPassword(password, user.verification);
         const token = await authService.generateUserToken(user);
 
         return new ResponseLib(req, res).json({
             status: true,
             message: "Login Successful",
-            data: UserMapper.toDTO({ user, token })
+            data: UserMapper.toDTO({ ...user, token })
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest) {

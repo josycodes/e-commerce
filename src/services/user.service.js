@@ -9,7 +9,7 @@ export default class UserService{
     }
 
     async createUser(options){
-        return await this.dbInstance.create(this.table, options);
+        return await this.dbInstance.createAndFetch(this.table, options);
     }
 
     async findUser(options){

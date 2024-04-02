@@ -4,7 +4,7 @@ import ResponseLib from "../../../libs/Response.lib.js";
 import productMapper from "../../../mappers/product.mapper.js";
 import ProductMapper from "../../../mappers/product.mapper.js";
 import ProductVariantService from "../../../services/product_variant.service.js";
-import ProductCollectionService from "../../../services/product_collection.service.js";
+import ProductCollectionService from "../../../services/product_categories.service.js";
 
 export const getProduct = async (req, res, next) => {
     const productService = new ProductService();

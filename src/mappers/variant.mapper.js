@@ -1,11 +1,11 @@
 export default class VariantMapper {
     static toDTO(data) {
         return {
-            data: {
-                id: data.id,
-                type: data.type,
-                value: data.value
-            }
+            variants: data.variants,
+            price: data.sale_price,
+            stock: data.stock,
+            image: data.image
         }
+
     }
 }

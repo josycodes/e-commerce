@@ -15,7 +15,6 @@ export default class AuthService{
             email: email
         });
         LoggerLib.log('User', {user});
-        if (!user) throw new BadRequest('User does not exist.')
         return user;
     }
 

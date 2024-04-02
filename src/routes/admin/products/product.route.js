@@ -26,7 +26,7 @@ router.post('/filter',
         [Segments.BODY]: Joi.object({
             min_price: Joi.number().positive().optional(),
             max_price: Joi.number().positive().optional(),
-            collection_id: Joi.array().optional(),
+            category_id: Joi.array().optional(),
             published_status: Joi.boolean().optional()
         }),
     }),

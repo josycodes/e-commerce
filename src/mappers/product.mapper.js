@@ -12,6 +12,9 @@ export default class ProductMapper {
                 name: data.name,
                 description: data.description,
                 published: data.published,
+                sku: data.sku,
+                tags: data.tags,
+                measuring_unit: data.measuring_unit,
                 variants,
                 total_stock
             }
