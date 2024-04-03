@@ -20,7 +20,8 @@ export default new class CloudinaryIntegration{
             return result.secure_url;
         }
         catch (error) {
-           throw new Error(error.message);
+            LoggerLib.error(error);
+           throw new ErrorLib(error.message);
         }
     }
 }
