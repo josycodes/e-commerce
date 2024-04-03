@@ -1,21 +1,17 @@
 import DBAdapter from "../db/DBAdapter.js";
 import {TABLE} from "../db/tables.js";
 
-export default class PromotionService {
+export default class ProductDiscountService {
     constructor() {
         this.dbInstance = new DBAdapter();
-        this.table = TABLE.PROMOTIONS;
+        this.table = TABLE.PRODUCT_DISCOUNT;
     }
 
-    async createPromotion(options){
+    async createProductDiscounts(options){
         return await this.dbInstance.createAndFetch(this.table, options);
     }
 
-    async updatePromotion(options){
-        return await this.dbInstance.updateAndFetch(this.table, options);
-    }
-
-    async getPromotion(options){
+    async getAllProductDiscounts(options){
         return await this.dbInstance.findOne(this.table, options);
     }
 }

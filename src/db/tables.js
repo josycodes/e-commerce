@@ -14,5 +14,6 @@ export const TABLE = {
     GENERAL_SHIPPING: 'general_shipping',
     PAYMENT_OPTION: 'payment_options',
     SALES_LOCATION: 'sales_location',
-    PROMOTIONS: 'promotions'
+    DISCOUNT: 'discounts',
+    PRODUCT_DISCOUNT: 'product_discounts',
 };
