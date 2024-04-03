@@ -42,7 +42,7 @@ export default class DBAdapter {
         try{
             LoggerLib.log('updateAndFetch', { table, options, data });
             const [updated] = await this.db(table).where(options).returning('id').update(data);
-            return await this.db.where({ id: updated.id }).first();
+            return await this.db(table).where({ id: updated.id }).first();
         }
         catch (error) {
             throw new ErrorLib('Error updating and fetching data ' + error.message);
