@@ -1,5 +1,5 @@
 export default class DiscountMapper {
-    static toDTO(data) {
+    static toDTO(data, discounted_data) {
         return {
             title: data.title,
             code: data.code,
@@ -11,7 +11,8 @@ export default class DiscountMapper {
             description: data.description,
             start_date: data.start_date,
             end_date: data.end_date,
-            status: data.status
+            status: data.status,
+            discounted_products: discounted_data ? discounted_data : null
         };
     }
 }
