@@ -40,6 +40,17 @@ export default class ProductService{
         }))
     }
 
+    async findOneProductVariant(product_id){
+        const variant = await this.productVariantService.findProductVariant({ product_id });
+        return {
+            variant: variant.variants,
+            price: variant.sale_price,
+            cost_price: variant.cost_price,
+            profit: variant.profit,
+            stock: variant.stock,
+            image: variant.image
+        }
+    }
     /**
      *
      * @param product_id

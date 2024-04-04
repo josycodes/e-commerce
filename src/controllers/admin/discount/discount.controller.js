@@ -56,12 +56,15 @@ export const getDiscount = async (req, res, next) => {
         const { discount_id } = req.params;
 
         //get Discount
-        const discount = await discountService.getDiscount({id: discount_id})
+        const discount = await discountService.getDiscount({id: discount_id});
+
+        //Get Discounted Products
+        const discountedProducts = await discountService.getDiscountedProducts({id: discount.id})
 
         return new ResponseLib(req, res).json({
             status: true,
             message: "Discount created Successfully",
-            data: DiscountMapper.toDTO(discount)
+            data: DiscountMapper.toDTO(discount, discountedProducts)
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
