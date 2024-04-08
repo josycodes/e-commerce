@@ -8,13 +8,16 @@ import { createGeneralShipping } from "../../../../controllers/admin/shipping/ge
 router.post('/',
     celebrate({
         [Segments.BODY]: Joi.object({
-            shipping_sales_location_option: Joi.string(),
-            customer_location: Joi.string(),
-            taxes: Joi.boolean(),
-            promotional_codes: Joi.boolean(),
             store_address: Joi.string(),
-            store_address_postal_code: Joi.string().optional(),
+            store_country: Joi.string(),
+            store_state: Joi.string(),
+            store_city: Joi.string(),
+            store_address_zip_code: Joi.string().optional(),
+            taxes: Joi.boolean(),
+            payment_on_delivery: Joi.boolean(),
+            discount: Joi.boolean(),
             sales_location: Joi.array().items({
+                country_id: Joi.number(),
                 country: Joi.string(),
                 postal_code: Joi.string()
             })

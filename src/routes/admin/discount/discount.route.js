@@ -2,7 +2,7 @@ import express from "express";
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 const router = express.Router();
-import {createDiscount, getDiscount, updateDiscount, addProducts} from "../../../controllers/admin/discount/discount.controller.js";
+import {createDiscount, getDiscount, getDiscountedProduct, updateDiscount, addProducts} from "../../../controllers/admin/discount/discount.controller.js";
 
 
 router.post('/add',
@@ -30,6 +30,16 @@ router.get('/:discount_id',
         }),
     }), getDiscount
 );
+
+router.get('/:discount_id/product/:product_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            discount_id: Joi.number(),
+            product_id: Joi.number()
+        }),
+    }), getDiscountedProduct
+);
+
 
 router.post('/:discount_id/update',
     celebrate({
