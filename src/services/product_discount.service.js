@@ -14,4 +14,8 @@ export default class ProductDiscountService {
     async getAllProductDiscounts(options){
         return await this.dbInstance.findAll(this.table, options);
     }
+
+    async getAllProductDiscount(options){
+        return await this.dbInstance.findOne(this.table, options);
+    }
 }

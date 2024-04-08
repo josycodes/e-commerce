@@ -63,8 +63,41 @@ export const getDiscount = async (req, res, next) => {
 
         return new ResponseLib(req, res).json({
             status: true,
-            message: "Discount created Successfully",
+            message: "Discount loaded Successfully",
             data: DiscountMapper.toDTO(discount, discountedProducts)
+        });
+    } catch (error) {
+        if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
+            return next(error);
+        }
+        next(error)
+    }
+}
+
+export const getDiscountedProduct = async (req, res, next) => {
+    const discountService = new DiscountService();
+    const productService = new ProductService();
+    try{
+        const { discount_id, product_id } = req.params;
+
+        //get Discount
+        const discount = await discountService.getDiscount({id: discount_id});
+        if(!discount) throw new NotFound('Discount not Found');
+
+        //get Product
+        const product = await productService.findProduct({id: product_id});
+        if(!product) throw new NotFound('Product not Found');
+
+        //Get Discounted Product
+        const discountedProduct = await discountService.getDiscountedProduct(discount, product)
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Discount Product loaded Successfully",
+            data: {
+                product: product,
+                discount: DiscountMapper.toDTO(discount, discountedProduct)
+            }
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
