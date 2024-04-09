@@ -21,6 +21,14 @@ export default class ShippingMethodService {
         }
     }
 
+    async updateShippingMethod(options, data){
+        return await this.dbInstance.updateAndFetch(this.table, options, data);
+    }
+
+    async findShippingMethod(options){
+        return await this.dbInstance.findOne(this.table, options);
+    }
+
     async getShippingMethodConditions(method_type,options){
         if(method_type === SHIPPING_METHODS.LOCATION_BASED){
             return await this.shippingLocationConditionService.getShippingConditions(options);
