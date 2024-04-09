@@ -53,10 +53,27 @@ export default class DBAdapter {
         try{
             LoggerLib.log('updateAndFetch', { table, options, data });
             const [updated] = await this.db(table).first().returning('id').update(data);
-            return await this.db.where({ id: updated.id }).first();
+            return await this.db(table).where({ id: updated.id }).first();
         }
         catch (error) {
             throw new ErrorLib('Error updating and fetching data ' + error.message);
+        }
+    }
+
+    async firstOrUpdate(table, data){
+        try{
+            LoggerLib.log('firstOrUpdate', { table, data });
+            const first = await this.db(table).first();
+            if(first){
+                const [updated] = await this.db(table).returning('id').update(data);
+                return await this.db(table).where({ id: updated.id }).first();
+            }else{
+                const [created] = await this.db(table).returning('id').insert(data);
+                return await this.db(table).where({ id: created.id }).first();
+            }
+        }
+        catch (error) {
+            throw new ErrorLib('Error updating and fetching first data ' + error.message);
         }
     }
 

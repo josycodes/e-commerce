@@ -1,3 +1,93 @@
+import ErrorLib, { BadRequest, NotFound } from "../../../../libs/Error.lib.js";
+import ResponseLib from "../../../../libs/Response.lib.js";
+import ShippingMethodService from "../../../../services/shipping_method.service.js";
+import {SHIPPING_METHODS} from "../../../../config/shipping_method.js";
+import ShippingLocationConditionService from "../../../../services/shipping_location_condition.service.js";
+import ShippingFlatRateConditionService from "../../../../services/shipping_rate_condition.service.js";
+import ShippingMethodMapper from "../../../../mappers/shipping_method.mapper.js";
+
+export const addShippingMethod = async (req, res, next) => {
+    const shippingMethodService = new ShippingMethodService();
+    const shippingLocationConditionService = new ShippingLocationConditionService();
+    const shippingFlatRateConditionService = new ShippingFlatRateConditionService();
+    try{
+        const {
+            name,
+            method_type,
+            description,
+            status,
+            conditions
+        } = req.body;
+
+        //create Shipping Method
+        const shipping_method = await shippingMethodService.addShippingMethod({
+            name,
+            type: method_type,
+            description,
+            status,
+        });
+
+        //Add Conditions
+        if(method_type === SHIPPING_METHODS.LOCATION_BASED){
+            await Promise.all(conditions.map(async (condition) => {
+                await shippingLocationConditionService.addShippingLocationCondition({
+                    shipping_method_id: shipping_method.id,
+                    charge: condition.charge,
+                    condition: condition.condition,
+                    condition_sign: condition.condition_sign,
+                    count: condition.count
+                })
+            }))
+
+        }else if(method_type === SHIPPING_METHODS.FLAT_RATE){
+            await Promise.all(conditions.map(async (condition) => {
+                await shippingFlatRateConditionService.addShippingFlatRateCondition({
+                    shipping_method_id: shipping_method.id,
+                    charge: condition.charge,
+                    condition: condition.condition,
+                    condition_sign: condition.condition_sign,
+                    count: condition.count
+                })
+            }))
+        }
+        const method_conditions = await shippingMethodService.getShippingMethodConditions(method_type, {
+            shipping_method_id: shipping_method.id
+        })
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Shipping Method Updated Successfully",
+            data: ShippingMethodMapper.toDTO({...shipping_method}, method_conditions)
+        });
+    } catch (error) {
+        if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
+            return next(error);
+        }
+        next(error)
+    }
+}
+
+export const listMethods = async (req, res, next) => {
+    const shippingMethodService = new ShippingMethodService();
+    try{
+        const shipping_methods = await shippingMethodService.getShippingMethods();
+        const MethodsDTO = await Promise.all(shipping_methods.map(async (shipping_method) => {
+            return ShippingMethodMapper.toDTO({...shipping_method})
+        }) )
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Shipping Method Loaded Successfully",
+            data: MethodsDTO
+            });
+    } catch (error) {
+        if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
+            return next(error);
+        }
+        next(error)
+    }
+}
+
 //
 // export const rates1 = async(req, res, next) => {
 //     const client = new Client();

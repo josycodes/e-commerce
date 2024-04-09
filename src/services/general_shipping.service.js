@@ -7,7 +7,7 @@ export default class GeneralShippingService {
         this.table = TABLE.GENERAL_SHIPPING;
     }
 
-    async updateShippingService(options){
-        return await this.dbInstance.updateFirstAndFetch(this.table, options);
+    async updateShippingService(data){
+        return await this.dbInstance.firstOrUpdate(this.table, data);
     }
 }
