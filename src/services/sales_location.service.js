@@ -8,6 +8,13 @@ export default class SalesLocationService {
     }
 
     async createSalesLocation(options){
-        return await this.dbInstance.createAndFetch(this.table, options);
+        const check = await this.dbInstance.findOne(this.table, options);
+        if(!check){
+            return await this.dbInstance.createAndFetch(this.table, options);
+        }
+    }
+
+    async getSalesLocation(options){
+        return await this.dbInstance.findAll(this.table, options);
     }
 }

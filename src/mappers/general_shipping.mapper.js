@@ -1,12 +1,18 @@
+import SalesLocationService from "../services/sales_location.service.js";
 export default class GeneralShippingMapper {
-    static async toDTO(data) {
+    static async toDTO(data, conditions) {
+        const saleLocationService = new SalesLocationService();
+        const sales_location = await saleLocationService.getSalesLocation();
         return {
-            shipping_sales_location_option: data.shipping_sales_location_option,
-            customer_location: data.customer_location,
-            taxes: data.taxes,
-            promotional_codes: data.promotional_codes,
             store_address: data.store_address,
-            store_address_postal_code: data.store_address_postal_code
+            country: data.country,
+            state: data.state,
+            city: data.city,
+            zip_code: data.zip_code,
+            taxes: data.taxes,
+            payment_on_delivery: data.payment_on_delivery,
+            discount: data.discount,
+            sales_location: sales_location
         };
     }
 }

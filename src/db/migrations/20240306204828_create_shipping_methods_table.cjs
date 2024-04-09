@@ -3,11 +3,12 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('sales_location', function(table) {
+    return knex.schema.createTable('shipping_methods', function(table) {
         table.increments('id').primary();
-        table.integer('country_id').references('id').inTable('countries');
-        table.string('country');
-        table.string('zip_code').nullable();
+        table.string('name');
+        table.string('type');
+        table.text('description');
+        table.boolean('status');
         table.timestamps(true, true);
     });
 };
@@ -17,5 +18,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists('sales_location');
+    return knex.schema.dropTableIfExists('shipping_methods');
 };

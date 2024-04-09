@@ -4,7 +4,6 @@ import { IncomingForm } from "formidable";
 import CloudinaryIntegration from "../../../integrations/cloudinary.integration.js";
 import ProductService from "../../../services/product.service.js";
 import ProductVariantService from "../../../services/product_variant.service.js";
-import ProductCollectionService from "../../../services/product_categories.service.js";
 import productMapper from "../../../mappers/product.mapper.js";
 import ProductMapper from "../../../mappers/product.mapper.js";
 import ProductCategoriesService from "../../../services/product_categories.service.js";

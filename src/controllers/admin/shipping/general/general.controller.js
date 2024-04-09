@@ -9,37 +9,44 @@ export const createGeneralShipping = async (req, res, next) => {
     const salesLocationService = new SalesLocationService();
     try{
         const {
-            shipping_sales_location_option,
-            customer_location,
-            promotional_codes,
-            taxes,
             store_address,
-            store_address_postal_code,
+            country_id,
+            country,
+            state,
+            city,
+            zip_code,
+            taxes,
+            payment_on_delivery,
+            discount,
             sales_location
         } = req.body;
 
-        //create Shipping Service
+        //create General Shipping Service
         const general_shipping = await generalShippingService.updateShippingService({
-            shipping_sales_location_option: shipping_sales_location_option,
-            customer_location,
-            taxes,
-            promotional_codes,
             store_address,
-            store_address_postal_code
+            country_id,
+            country,
+            state,
+            city,
+            zip_code,
+            taxes,
+            payment_on_delivery,
+            discount
         });
 
         // Create Sales Location
         await Promise.all(sales_location.map(async (sale_location) => {
             await salesLocationService.createSalesLocation({
+                country_id: sale_location.country_id,
                 country: sale_location.country,
-                postal_code: sale_location.postal_code
+                zip_code: sale_location.zip_code
             })
         }));
 
         return new ResponseLib(req, res).json({
             status: true,
             message: "General Shipping Updated Successfully",
-            data: GeneralShippingMapper.toDTO({general_shipping})
+            data: await GeneralShippingMapper.toDTO({...general_shipping})
         });
     } catch (error) {
         if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {

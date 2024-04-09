@@ -9,17 +9,18 @@ router.post('/',
     celebrate({
         [Segments.BODY]: Joi.object({
             store_address: Joi.string(),
-            store_country: Joi.string(),
-            store_state: Joi.string(),
-            store_city: Joi.string(),
-            store_address_zip_code: Joi.string().optional(),
+            country_id: Joi.number(),
+            country: Joi.string(),
+            state: Joi.string(),
+            city: Joi.string(),
+            zip_code: Joi.string().optional(),
             taxes: Joi.boolean(),
             payment_on_delivery: Joi.boolean(),
             discount: Joi.boolean(),
             sales_location: Joi.array().items({
-                country_id: Joi.number(),
-                country: Joi.string(),
-                postal_code: Joi.string()
+                country_id: Joi.number().optional(),
+                country: Joi.string().optional(),
+                zip_code: Joi.string().optional()
             })
         }),
     }), createGeneralShipping

@@ -35,7 +35,7 @@ export default class AuthService{
 
     async generateUserToken(user, scope = 'user') {
         return jwt.sign({id: user.id, scope: scope}, process.env.JWT_SECRET, {
-            expiresIn: 60*24
+            expiresIn: '5h'
         });
     }
 }
