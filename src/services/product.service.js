@@ -17,8 +17,20 @@ export default class ProductService{
         return await this.dbInstance.findOne(this.table,options);
     }
 
+    async findProductLIKE(options){
+        return await this.dbInstance.findAllLIKE(this.table,options);
+    }
+
+    async updateProduct(options, data){
+        return await this.dbInstance.updateAndFetch(this.table,options, data);
+    }
+
     async findAll(options){
         return await this.dbInstance.findAll(this.table, options);
+    }
+
+    async findAllCount(options){
+        return await this.dbInstance.findAndCount(this.table, options);
     }
 
     async findAllWhereIn(columnName, data){
@@ -30,6 +42,7 @@ export default class ProductService{
 
         return await Promise.all(variants.map(async (variant) => {
             return {
+                id: variant.id,
                 variant: variant.variants,
                 price: variant.sale_price,
                 cost_price: variant.cost_price,

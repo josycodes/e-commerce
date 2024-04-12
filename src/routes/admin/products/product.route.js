@@ -4,7 +4,13 @@ import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 const router = express.Router();
 
-import { create, getProduct, getAll, filterProducts } from "../../../controllers/admin/products/product.controller.js";
+import {
+    create,
+    getProduct,
+    getAll,
+    filterProducts,
+    updateProductStatus
+} from "../../../controllers/admin/products/product.controller.js";
 
 router.use(authorizeRequest);
 
@@ -24,6 +30,7 @@ router.get('/all', getAll);
 router.post('/filter',
     celebrate({
         [Segments.BODY]: Joi.object({
+            search:Joi.string().optional(),
             min_price: Joi.number().positive().optional(),
             max_price: Joi.number().positive().optional(),
             category_id: Joi.array().optional(),
@@ -31,5 +38,16 @@ router.post('/filter',
         }),
     }),
     filterProducts);
+
+router.post('/update/status/:product_id',
+    celebrate({
+        [Segments.PARAMS]:{
+            product_id: Joi.number()
+        },
+        [Segments.BODY]: Joi.object({
+            published_status: Joi.boolean().required(),
+        })
+    }),
+    updateProductStatus);
 
 export default router;

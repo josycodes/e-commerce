@@ -23,6 +23,10 @@ export default class DiscountService {
         return await this.dbInstance.update(this.table, options, data);
     }
 
+    async findAllDiscountsWhereIn(columnName, data){
+        return await this.dbInstance.findWhereIn(this.table, columnName, data);
+    }
+
     async getDiscount(options){
         return await this.dbInstance.findOne(this.table, options);
     }

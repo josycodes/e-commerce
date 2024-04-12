@@ -24,6 +24,10 @@ export default class CategoryService {
         return await this.dbInstance.findOne(this.table, options);
     }
 
+    async findCategoryWhereIn(columnName, data){
+        return await this.dbInstance.findWhereIn(this.table, columnName, data);
+    }
+
     async updateCategory(options, data){
         return await this.dbInstance.updateAndFetch(this.table, options, data);
     }

@@ -29,6 +29,7 @@ export const register = async (req, res, next) => {
                 email,
                 phone,
             });
+
             if(stripeCreatedUser){
                 const createdUser = await userService.createUser({
                     name: stripeCreatedUser.name,
@@ -44,7 +45,7 @@ export const register = async (req, res, next) => {
                     data: UserMapper.toDTO(createdUser)
                 });
             }else{
-                throw new ErrorLib('Stripe Registration');
+                throw new ErrorLib('Stripe Registration Error', 500);
             }
         }
     }
