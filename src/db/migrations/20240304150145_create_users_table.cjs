@@ -13,6 +13,7 @@ exports.up = function(knex) {
         table.string('phone').notNullable().unique();
         table.string('verification').notNullable();
         table.string('stripe_customer_id').notNullable().unique();
+        table.string('status').notNullable().defaultTo('active');
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };

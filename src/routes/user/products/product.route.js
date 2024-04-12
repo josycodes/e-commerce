@@ -20,9 +20,10 @@ router.get('/id/:product_id',
 router.post('/filter',
     celebrate({
         [Segments.BODY]: Joi.object({
+            search:Joi.string().optional(),
             min_price: Joi.number().positive().optional(),
             max_price: Joi.number().positive().optional(),
-            collection_id: Joi.array().optional()
+            category_id: Joi.array().optional()
         }),
     }),
     filterProducts);

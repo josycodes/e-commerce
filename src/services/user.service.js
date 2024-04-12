@@ -15,4 +15,12 @@ export default class UserService{
     async findUser(options){
         return await this.dbInstance.findOne(this.table, options);
     }
+
+    async findAllUsers(options = {}){
+        return await this.dbInstance.findAll(this.table, options);
+    }
+
+    async findAllUsersCount(options = {}){
+        return await this.dbInstance.findAndCount(this.table, options);
+    }
 }

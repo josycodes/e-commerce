@@ -19,7 +19,5 @@ export const TABLE = {
     SALES_LOCATION: 'sales_location',
     DISCOUNT: 'discounts',
     PRODUCT_DISCOUNT: 'product_discounts',
-    COUNTRIES: 'countries',
-    STATES: 'states',
-    CITIES: 'cities',
+    REVIEW: 'reviews'
 };

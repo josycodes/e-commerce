@@ -73,4 +73,30 @@ export default class ProductMapper {
             }
         };
     }
+
+    static async userdataDTO(data) {
+        const productService = new ProductService();
+        const total_stock = await productService.productTotalStock(data.id);
+        const variants = await productService.productVariants(data.id);
+        const orderItemService = new OrderItemService();
+        const orderItems = await orderItemService.getOrderItems({ product_id: data.id });
+        return {
+            product: {
+                id: data.id,
+                name: data.name,
+                description: data.description,
+                published: data.published,
+                images: data.images,
+                sku: data.sku,
+                tags: data.tags,
+                measuring_unit: data.measuring_unit,
+                variants,
+                total_stock,
+                quantity_sold: orderItems.length,
+                created_at: data.created_at,
+                discount: null,
+                reviews: null
+            }
+        };
+    }
 }

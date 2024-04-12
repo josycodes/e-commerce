@@ -12,6 +12,7 @@ exports.up = function(knex) {
         table.decimal('total_amount', 10, 2).notNullable();
         table.integer('shipping_address_id').references('id').inTable('shipping_addresses');
         table.string('payment_status').notNullable().defaultTo('processing');
+        table.string('status').notNullable().defaultTo('pending');
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };

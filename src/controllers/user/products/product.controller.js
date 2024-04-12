@@ -5,6 +5,7 @@ import productMapper from "../../../mappers/product.mapper.js";
 import ProductMapper from "../../../mappers/product.mapper.js";
 import ProductVariantService from "../../../services/product_variant.service.js";
 import ProductCollectionService from "../../../services/product_categories.service.js";
+import ProductCategoriesService from "../../../services/product_categories.service.js";
 
 export const getProduct = async (req, res, next) => {
     const productService = new ProductService();
@@ -29,7 +30,7 @@ export const getAll = async(req, res, next) => {
     try{
         const products = await productService.findAll({published: true});
         const productsDTO = await Promise.all(products.map(async (product) => {
-            return ProductMapper.toDTO({...product});
+            return await ProductMapper.userdataDTO({...product});
         }));
 
         return new ResponseLib(req, res).json({
@@ -45,9 +46,9 @@ export const getAll = async(req, res, next) => {
 
 export const filterProducts = async (req, res, next) => {
     const productVariantService = new ProductVariantService();
-    const productCollectionService = new ProductCollectionService();
+    const productCategoryService = new ProductCategoriesService();
     const productService = new ProductService();
-    const { min_price, max_price, collection_id, published_status } = req.body;
+    const { min_price, max_price, category_id, search } = req.body;
     let productIDs = [];
     const options = {};
     try{
@@ -67,19 +68,25 @@ export const filterProducts = async (req, res, next) => {
             });
         }
 
-        if(collection_id){
-            const result2 = await productCollectionService.findProductCollectionWhereIn('collection_id', collection_id);
+        if(category_id){
+            const result2 = await productCategoryService.findProductsCategoryWhereIn('category_id', category_id);
             result2.forEach(row => {
                 productIDs.push(row.product_id);
+            });
+        }
+        if(search){
+            const result3 = await productService.findProductLIKE({columnName: 'name',search: `%${search}%`});
+            result3.forEach(row => {
+                productIDs.push(row.id);
             });
         }
 
         //merge productIDs
         const uniqueProductIDs = [...new Set(productIDs)];
 
-        const products = await productService.findAllWhereIn('id', uniqueProductIDs);
+        const products = await productService.findAllWhereInOptions('id', uniqueProductIDs, {published: true});
         const productsDTO = await Promise.all(products.map(async (product) => {
-            return ProductMapper.toDTO({...product});
+            return ProductMapper.userdataDTO({...product});
         }));
 
         return new ResponseLib(req, res).json({

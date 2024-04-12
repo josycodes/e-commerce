@@ -127,6 +127,16 @@ export default class DBAdapter {
         }
     }
 
+    async findWhereInOptions(table, columnName, data= [], options = {}){
+        try{
+            LoggerLib.log('findWhereInOptions', {table, columnName, data});
+            return await this.db(table).whereIn(columnName,data).where(options);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding data WhereIn Options ' + error.message);
+        }
+    }
+
     async getTotalOfColumn(table, columnName, options) {
         try {
             const result = await this.db(table).sum(columnName).where(options);
