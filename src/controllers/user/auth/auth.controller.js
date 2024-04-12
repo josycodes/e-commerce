@@ -13,7 +13,7 @@ export const register = async (req, res, next) => {
     const userService = new UserService();
     const Stripe = new StripeIntegration();
     try{
-        const { full_name, email,phone, password } = req.body;
+        const { full_name, email, phone, password } = req.body;
 
         //find User
         const user = await authService.findUserByEmail(email);

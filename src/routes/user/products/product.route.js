@@ -6,6 +6,8 @@ import {filterProducts, getAll, getProduct} from "../../../controllers/user/prod
 import {authorizeRequest} from "../../../middleware/authentication.middleware.js";
 router.use(authorizeRequest);
 
+router.get('/all', getAll);
+
 router.get('/id/:product_id',
     celebrate({
         [Segments.PARAMS]: Joi.object({
@@ -14,7 +16,6 @@ router.get('/id/:product_id',
     }),
     getProduct);
 
-router.get('/all', getAll);
 
 router.post('/filter',
     celebrate({

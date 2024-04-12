@@ -2,15 +2,26 @@ import ErrorLib, { BadRequest, NotFound } from "../../../libs/Error.lib.js";
 import ResponseLib from "../../../libs/Response.lib.js";
 import CategoryService from "../../../services/category.service.js";
 import CategoryMapper from "../../../mappers/category.mapper.js";
+import ProductCategoriesService from "../../../services/product_categories.service.js";
 
 export const create = async (req, res, next) => {
     const categoryService = new CategoryService();
+    const productCategoryService = new ProductCategoriesService();
     try {
-        const { name, slug, description, status } = req.body;
+        const { name, slug, description, status, products } = req.body;
 
         const createdCategory = await categoryService.createCategory({
             name, slug, description, status
         });
+
+        //add products to category
+        if(products){
+            for (const product of products) {
+                await productCategoryService.createProductCategory({
+                    category_id: createdCategory.id, product_id: product
+                });
+            }
+        }
 
         return new ResponseLib(req, res).json({
             status: true,
@@ -29,6 +40,8 @@ export const getAll = async (req, res, next) => {
     const categoryService = new CategoryService();
     try {
         const categories = await categoryService.getAllCategories();
+        const active_categories = await categoryService.getCountCategories({status: true});
+        const inactive_categories = await categoryService.getCountCategories({status: false});
         const categoriesDTO = await Promise.all(categories.map(async (category) => {
             return CategoryMapper.toDTO({...category});
         }));
@@ -36,7 +49,10 @@ export const getAll = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Categories Loaded",
-            data: categoriesDTO
+            data: categoriesDTO,
+            all_categories: categories.length,
+            active_categories: parseInt(active_categories[0].count) ,
+            inactive_categories: parseInt(inactive_categories[0].count)
         });
     } catch (error) {
         next(error)
@@ -46,11 +62,13 @@ export const getAll = async (req, res, next) => {
 export const edit = async (req, res, next) => {
     const categoryService = new CategoryService();
     try {
-        const { category_id } = req.params.category_id;
+        const { category_id } = req.params;
         const { name, slug, description } = req.body;
 
         //Validate category_id
-        const category = await categoryService.findCategory({id: category_id});
+        const category = await categoryService.findCategory({
+            id: category_id
+        });
         if(!category){
             throw new ErrorLib('Invalid category', 400);
         }
@@ -60,7 +78,31 @@ export const edit = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Category Updated",
-            data: CategoryMapper.toDTO(updated_category)
+            data: await CategoryMapper.toDTO({...updated_category})
+        });
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export const getCategory = async (req, res, next) => {
+    const categoryService = new CategoryService();
+    try {
+        const { category_id } = req.params;
+
+        //Validate category_id
+        const category = await categoryService.findCategory({
+            id: category_id
+        });
+        if(!category){
+            throw new ErrorLib('Invalid category', 400);
+        }
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Category Loaded",
+            data: await CategoryMapper.toDTO({...category})
         });
     } catch (error) {
         next(error)

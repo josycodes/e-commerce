@@ -12,8 +12,12 @@ export default class CategoryService {
         return await this.dbInstance.createAndFetch(this.table, options);
     }
 
-    async getAllCategories(){
-        return await this.dbInstance.findAll(this.table);
+    async getAllCategories(options = {}){
+        return await this.dbInstance.findAll(this.table, options);
+    }
+
+    async getCountCategories(options){
+        return await this.dbInstance.findAndCount(this.table, options);
     }
 
     async findCategory(options){
