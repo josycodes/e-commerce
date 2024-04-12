@@ -11,4 +11,12 @@ export default class ReviewService{
     async createReview(options){
         return await this.dbInstance.createAndFetch(this.table, options);
     }
+
+    async findReview(options){
+        return await this.dbInstance.findOne(this.table, options);
+    }
+
+    async findAllReviews(options){
+        return await this.dbInstance.findAll(this.table, options);
+    }
 }

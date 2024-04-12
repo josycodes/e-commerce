@@ -17,7 +17,7 @@ export const getProduct = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Product Loaded Successfully",
-            data: await productMapper.toDTO({...product})
+            data: await productMapper.userdataDTO({...product})
         });
     }
     catch (error) {

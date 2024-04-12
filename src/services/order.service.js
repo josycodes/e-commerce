@@ -22,7 +22,13 @@ export default class OrderService {
 
     async findProductFromOrders(options, product_id){
         const orders = await this.dbInstance.findAll(this.table, options);
+        for (const order of orders) {
+            const orderItems = await this.orderItemService.getOrderItems({ order_id: order.id, product_id });
+            if (orderItems.length > 0) {
+                return orderItems; // Return the orderItems when found
+            }
+        }
+        return null;
 
-        // await this.orderItemService.getOrderItems({order_id: order.id});
     }
 }

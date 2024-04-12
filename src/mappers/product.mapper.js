@@ -1,5 +1,10 @@
 import ProductService from "../services/product.service.js";
 import OrderItemService from "../services/order_item.service.js";
+import ProductDiscountService from "../services/product_discount.service.js";
+import DiscountService from "../services/discount.service.js";
+import ReviewMapper from "./review.mapper.js";
+import ReviewService from "../services/review.service.js";
+import ShippingMethodService from "../services/shipping_method.service.js";
 
 export default class ProductMapper {
     static async toDTO(data) {
@@ -74,29 +79,106 @@ export default class ProductMapper {
         };
     }
 
-    static async userdataDTO(data) {
+    static async userdataDTO(data, reviews = true) {
         const productService = new ProductService();
+        const productDiscountService = new ProductDiscountService();
+        const discountService = new DiscountService();
+        const reviewService = new ReviewService();
+        const shippingService = new ShippingMethodService();
+
         const total_stock = await productService.productTotalStock(data.id);
         const variants = await productService.productVariants(data.id);
         const orderItemService = new OrderItemService();
         const orderItems = await orderItemService.getOrderItems({ product_id: data.id });
-        return {
-            product: {
-                id: data.id,
-                name: data.name,
-                description: data.description,
-                published: data.published,
-                images: data.images,
-                sku: data.sku,
-                tags: data.tags,
-                measuring_unit: data.measuring_unit,
-                variants,
-                total_stock,
-                quantity_sold: orderItems.length,
-                created_at: data.created_at,
-                discount: null,
-                reviews: null
-            }
-        };
+
+        const discount_products = await productDiscountService.getAllProductDiscounts({product_id: data.id});
+        const discountsIds = discount_products.map(discount_product => discount_product.discount_id);
+        const discounts = await discountService.findAllDiscountsWhereIn('id', discountsIds);
+
+        //Shipping for product
+        const shipping = await shippingService.findShippingMethod({id: data.shipping_id});
+        console.log('////////////////////////', shipping);
+        let shipping_conditions = null;
+        if(shipping){
+            shipping_conditions = await shippingService.getShippingMethodConditions(shipping.type, {shipping_method_id: shipping.id});
+        }
+
+        let reviewsDTO = null;
+        if(reviews){
+            const reviews = await reviewService.findAllReviews({product_id: data.id});
+            reviewsDTO = await Promise.all(reviews.map(async (review) => {
+                return await ReviewMapper.userToDTO({...review});
+            }));
+
+            // Calculate total rating and count of reviews using reduce
+            const { totalRating, reviewCount, ratingCounts } = reviews.reduce((accumulator, review) => {
+                // Add rating to totalRating
+                accumulator.totalRating += review.rating;
+                // Increment the count for the corresponding rating
+                accumulator.ratingCounts[review.rating]++;
+                // Increment review count
+                accumulator.reviewCount++;
+                return accumulator;
+            }, { totalRating: 0, reviewCount: 0, ratingCounts: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } });
+            // Calculate the average rating
+            const averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+
+            return {
+                product: {
+                    id: data.id,
+                    name: data.name,
+                    description: data.description,
+                    published: data.published,
+                    images: data.images,
+                    sku: data.sku,
+                    tags: data.tags,
+                    measuring_unit: data.measuring_unit,
+                    variants,
+                    total_stock,
+                    quantity_sold: orderItems.length,
+                    created_at: data.created_at,
+                    discount: discounts,
+                    reviews: reviewsDTO,
+                    rating_analytics: {
+                        averageRating,
+                        total_ratings: reviewsDTO.length,
+                        ratingCounts
+                    },
+                    shipping:{
+                        shipping,
+                        shipping_conditions
+                    }
+                }
+            };
+        }else{
+            return {
+                product: {
+                    id: data.id,
+                    name: data.name,
+                    description: data.description,
+                    published: data.published,
+                    images: data.images,
+                    sku: data.sku,
+                    tags: data.tags,
+                    measuring_unit: data.measuring_unit,
+                    variants,
+                    total_stock,
+                    quantity_sold: orderItems.length,
+                    created_at: data.created_at,
+                    discount: discounts,
+                    reviews: reviewsDTO,
+                    rating_analytics: {
+                        averageRating:null,
+                        ratingCounts: null
+                    },
+                    shipping:{
+                        shipping,
+                        shipping_conditions
+                    }
+                }
+            };
+        }
+
+
     }
 }

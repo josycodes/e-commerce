@@ -4,6 +4,9 @@ import ProductDiscountService from "./product_discount.service.js";
 import ProductService from "./product.service.js";
 import OrderItemService from "./order_item.service.js";
 import OrderService from "./order.service.js";
+import ShippingLocationConditionService from "./shipping_location_condition.service.js";
+import ShippingFlatRateConditionService from "./shipping_rate_condition.service.js";
+import {SHIPPING_METHODS} from "../config/shipping_method.js";
 
 export default class DiscountService {
     constructor() {
@@ -13,6 +16,8 @@ export default class DiscountService {
         this.productService = new ProductService();
         this.orderItemService = new OrderItemService();
         this.orderService = new OrderService();
+        this.shippingLocationCondition = new ShippingLocationConditionService()
+        this.shippingRateCondition = new ShippingFlatRateConditionService()
     }
 
     async createDiscount(options){

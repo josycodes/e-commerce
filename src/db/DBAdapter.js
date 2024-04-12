@@ -90,7 +90,7 @@ export default class DBAdapter {
     async findAllLIKE(table, options){
         try{
             LoggerLib.log('find', {table, options});
-            return await this.db(table).whereLike(options.columnName, options.search);
+            return await this.db(table).whereILike(options.columnName, options.search);
         }
         catch (error) {
             throw new ErrorLib('Error finding LIKE data ' + error.message);
