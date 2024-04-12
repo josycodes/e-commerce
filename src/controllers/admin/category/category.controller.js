@@ -102,7 +102,7 @@ export const getCategory = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Category Loaded",
-            data: await CategoryMapper.toDTO({...category})
+            data: await CategoryMapper.toDTO({...category}),
         });
     } catch (error) {
         next(error)

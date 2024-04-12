@@ -14,6 +14,10 @@ export default class CategoryMapper {
                const product = await productService.findProduct({id: product_category.product_id});
                return await ProductMapper.toDTO({...product});
             }));
+            // Count published products
+            const publishedCount = productsDTO.filter(item => item.product.published).length;
+            // Count unpublished products
+            const unpublishedCount = productsDTO.filter(item => !item.product.published).length;
 
             return {
                 id: data.id,
@@ -22,6 +26,9 @@ export default class CategoryMapper {
                 description: data.description,
                 status: data.status,
                 products: productsDTO,
+                total_products_count: product_categories.length,
+                published_products_count: publishedCount,
+                inactive_products_count: unpublishedCount,
                 created_at: data.created_at
             }
         }else{
