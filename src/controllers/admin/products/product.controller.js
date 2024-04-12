@@ -199,13 +199,6 @@ export const getProduct = async (req, res, next) => {
 
         }
 
-
-
-
-
-
-
-
         /** MONTHLY CALCULATIONS */
         // Get the current month
         const currentMonth = moment().month();

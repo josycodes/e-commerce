@@ -6,7 +6,7 @@ import VariantService from "./variant.service.js";
 export default class CartService{
     constructor() {
         this.dbInstance = new DBAdapter();
-        this.table = TABLE.PRODUCT
+        this.table = TABLE.CART_ITEM
         this.productVariantService = new ProductVariantService();
         this.variantService = new VariantService();
 

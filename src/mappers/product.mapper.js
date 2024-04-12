@@ -97,7 +97,6 @@ export default class ProductMapper {
 
         //Shipping for product
         const shipping = await shippingService.findShippingMethod({id: data.shipping_id});
-        console.log('////////////////////////', shipping);
         let shipping_conditions = null;
         if(shipping){
             shipping_conditions = await shippingService.getShippingMethodConditions(shipping.type, {shipping_method_id: shipping.id});
