@@ -15,7 +15,7 @@ router.post(
                 .error(
                     new Error("Full name must contain at least 3 alphabetic characters only")
                 ),
-            phone: Joi.string().required(),
+            phone: Joi.string().optional(),
             email: Joi.string()
                 .email()
                 .required()

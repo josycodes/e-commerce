@@ -17,24 +17,25 @@ export const register = async (req, res, next) => {
 
         //find User
         const user = await authService.findUserByEmail(email);
-        const userWithPhone = await userService.findUser({phone});
+        // if(phone){
+        //     const userWithPhone = await userService.findUser({phone});
+        //     if(userWithPhone) throw new ErrorLib('User already exists', 400);
+        // }
         const salt = await bcrypt.genSalt(10);
         const hash_password = await bcrypt.hash(password, salt);
-        if(user || userWithPhone){
+        if(user){
             throw new ErrorLib('User already exists', 400);
         }else{
             // create User on Stripe
             const stripeCreatedUser = await Stripe.createCustomer({
                 name: full_name,
-                email,
-                phone,
+                email
             });
 
             if(stripeCreatedUser){
                 const createdUser = await userService.createUser({
                     name: stripeCreatedUser.name,
                     email: stripeCreatedUser.email,
-                    phone: stripeCreatedUser.phone,
                     verification: hash_password,
                     stripe_customer_id: stripeCreatedUser.id
                 });
