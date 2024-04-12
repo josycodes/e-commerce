@@ -15,6 +15,10 @@ export default class ProductVariantService{
         return await this.dbInstance.findOne(this.table, options);
     }
 
+    async updateProductVariant(options, data){
+        return await this.dbInstance.update(this.table, options, data);
+    }
+
     async findVariants(options){
         return await this.dbInstance.findAll(this.table, options);
     }

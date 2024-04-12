@@ -9,7 +9,7 @@ import {
     getProduct,
     getAll,
     filterProducts,
-    updateProductStatus
+    updateProductStatus, restockProduct, adjustStockProduct
 } from "../../../controllers/admin/products/product.controller.js";
 
 router.use(authorizeRequest);
@@ -49,5 +49,31 @@ router.post('/update/status/:product_id',
         })
     }),
     updateProductStatus);
+
+router.post('/update/restock/inventory/:product_id',
+    celebrate({
+        [Segments.PARAMS]:{
+            product_id: Joi.number()
+        },
+        [Segments.BODY]: Joi.object({
+            variant_id: Joi.number().required(),
+            restock_quantity: Joi.number().required(),
+            note: Joi.string().optional()
+        })
+    }),
+    restockProduct);
+
+router.post('/update/adjust/inventory/:product_id',
+    celebrate({
+        [Segments.PARAMS]:{
+            product_id: Joi.number()
+        },
+        [Segments.BODY]: Joi.object({
+            variant_id: Joi.number().required(),
+            new_quantity: Joi.number().required(),
+            note: Joi.string().optional()
+        })
+    }),
+    adjustStockProduct);
 
 export default router;

@@ -427,3 +427,51 @@ export const updateProductStatus = async (req, res, next) => {
         next(error)
     }
 }
+
+export const restockProduct = async (req, res, next) => {
+    const productService = new ProductService();
+    const productVariantService = new ProductVariantService();
+    const { product_id } = req.params;
+    const { variant_id, restock_quantity } = req.body;
+    try{
+        const product = await productService.findProduct({id: product_id});
+        if(!product) throw new NotFound('Product not found');
+
+        const productVariant = await productVariantService.findProductVariant({id: variant_id});
+        if(!productVariant) throw new NotFound('Invalid Product Variant');
+
+        await productVariantService.updateProductVariant({id: productVariant.id}, {stock: productVariant.stock + restock_quantity})
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Product Restocked"
+        });
+    }
+    catch (error) {
+        next(error)
+    }
+}
+
+export const adjustStockProduct = async (req, res, next) => {
+    const productService = new ProductService();
+    const productVariantService = new ProductVariantService();
+    const { product_id } = req.params;
+    const { variant_id, new_quantity } = req.body;
+    try{
+        const product = await productService.findProduct({id: product_id});
+        if(!product) throw new NotFound('Product not found');
+
+        const productVariant = await productVariantService.findProductVariant({id: variant_id});
+        if(!productVariant) throw new NotFound('Invalid Product Variant');
+
+        await productVariantService.updateProductVariant({ id: productVariant.id }, {stock: new_quantity})
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Product Stock Adjusted"
+        });
+    }
+    catch (error) {
+        next(error)
+    }
+}
