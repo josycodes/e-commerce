@@ -50,11 +50,13 @@ export const create = async (req, res, next) => {
                 });
             }
 
+
             for (let i = 0; i < 7; i++) {
                 const key = `product_gallery${i}`;
-                const [productImage] = files[key];
+                console.log(files[key], key,'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
 
-                if(productImage) {
+                if(files[key]) {
+                    const [productImage] = files[key];
                     await CloudinaryIntegration.upload(productImage.filepath, function (error, result) {
                         if (error) {
                             next(error);
@@ -118,18 +120,22 @@ export const create = async (req, res, next) => {
                 await Promise.all(decoded.map(async (decoded_variant, index) => {
                     let image_url = null;
                     const key = `variant${index}`;
-                    const [variantImage] = files[key];
-                    // console.log('///////////////////////', variantImage.filepath, '==============',files[key]);
 
-                    if(variantImage){
-                        await CloudinaryIntegration.upload(variantImage.filepath, function (error, result) {
-                            if (error) {
-                                next(error);
-                            } else {
-                                image_url = result.secure_url; // Append URL to the array
-                            }
-                        });
+                    if(files[key]){
+                        const [variantImage] = files[key];
+                        // console.log('///////////////////////', variantImage.filepath, '==============',files[key]);
+
+                        if(variantImage){
+                            await CloudinaryIntegration.upload(variantImage.filepath, function (error, result) {
+                                if (error) {
+                                    next(error);
+                                } else {
+                                    image_url = result.secure_url; // Append URL to the array
+                                }
+                            });
+                        }
                     }
+
 
                     await productVariantService.createProductVariant({
                         product_id: product.id,
