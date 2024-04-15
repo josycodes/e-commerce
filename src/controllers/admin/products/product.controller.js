@@ -33,9 +33,7 @@ export const create = async (req, res, next) => {
 
             // Access form fields
             const { name, description, variants, categories, tags, measuring_unit, sku, discount_id, tax_id, shipping_id } = fields;
-            // const { product_gallery } = files;
-
-            const product_gallery = files['product_gallery[]'];
+            const { product_gallery0 } = files;
 
             //Field Validation
             if (!name || !description || !variants || !categories) {
@@ -45,28 +43,45 @@ export const create = async (req, res, next) => {
                 });
             }
 
-            const imagesArray = Array.isArray(product_gallery) ? product_gallery : [product_gallery];
-            if(!imagesArray[0]) {
+            if(!product_gallery0) {
                 return res.status(400).json({
                     status: false,
                     message: "product gallery is required"
                 });
             }
 
-            await Promise.all(imagesArray.map(image => {
-                return new Promise((resolve, reject) => {
-                    CloudinaryIntegration.upload(image.filepath, function (error, result) {
+            for (let i = 0; i < 7; i++) {
+                const key = `product_gallery${i}`;
+                const [productImage] = files[key];
+
+                if(productImage) {
+                    await CloudinaryIntegration.upload(productImage.filepath, function (error, result) {
                         if (error) {
-                            reject(error);
+                            next(error);
                         } else {
                             uploadedImages.push(result.secure_url); // Append URL to the array
-                            resolve();
                         }
                     });
-                });
-            })).catch(error => {
-                next(error);
-            });
+                }
+            }
+
+
+            //     await Promise.all(imagesArray.map(image => {
+            //     return new Promise((resolve, reject) => {
+            //         CloudinaryIntegration.upload(image.filepath, function (error, result) {
+            //             if (error) {
+            //                 reject(error);
+            //             } else {
+            //                 uploadedImages.push(result.secure_url); // Append URL to the array
+            //                 resolve();
+            //             }
+            //         });
+            //     });
+            // })).catch(error => {
+            //     next(error);
+            // });
+
+
             let product;
 
             product = await productService.createProduct({
