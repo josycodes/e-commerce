@@ -32,8 +32,7 @@ export const create = async (req, res, next) => {
             }
 
             // Access form fields
-            const { name, description, variants, categories, tags, measuring_unit, sku, discount_id, tax_id, shipping_id } = fields;
-            const { product_gallery } = files;
+            const { name, description, variants, categories, tags, measuring_unit, sku, discount_id, tax_id, shipping_id, product_gallery } = fields;
 
             //Field Validation
             if (!name || !description || !variants || !categories) {
