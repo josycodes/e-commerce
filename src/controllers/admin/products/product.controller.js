@@ -32,7 +32,8 @@ export const create = async (req, res, next) => {
             }
 
             // Access form fields
-            const { name, description, variants, categories, tags, measuring_unit, sku, discount_id, tax_id, shipping_id, product_gallery } = fields;
+            const { name, description, variants, categories, tags, measuring_unit, sku, discount_id, tax_id, shipping_id } = fields;
+            const { product_gallery } = files;
 
             //Field Validation
             if (!name || !description || !variants || !categories) {
@@ -41,25 +42,14 @@ export const create = async (req, res, next) => {
                     message: "Missing required fields: name, description, variants, collections"
                 });
             }
-            console.log(product_gallery, '==================================');
 
             const imagesArray = Array.isArray(product_gallery) ? product_gallery : [product_gallery];
-
-            return res.status(400).json({
-                status: false,
-                message: "product gallery is required",
-                request_data: product_gallery,
-                images_array: imagesArray
-            });
-
-            // if(!imagesArray[0]) {
-            //     return res.status(400).json({
-            //         status: false,
-            //         message: "product gallery is required",
-            //         request_data: product_gallery,
-            //         images_array: imagesArray
-            //     });
-            // }
+            if(!imagesArray[0]) {
+                return res.status(400).json({
+                    status: false,
+                    message: "product gallery is required"
+                });
+            }
 
             await Promise.all(imagesArray.map(image => {
                 return new Promise((resolve, reject) => {
