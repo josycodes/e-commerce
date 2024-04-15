@@ -17,6 +17,7 @@ import OrderItemService from "../../../services/order_item.service.js";
 
 export const create = async (req, res, next) => {
     const productService = new ProductService();
+    const productDiscount = new ProductDiscountService();
     const productVariantService = new ProductVariantService();
     const productCategoryService = new ProductCategoriesService();
     try {
@@ -72,11 +73,19 @@ export const create = async (req, res, next) => {
                 images: JSON.stringify(uploadedImages),
                 sku: sku ? sku[0] : null,
                 measuring_unit: measuring_unit[0],
-                discount_id: discount_id ? discount_id[0]: null,
+                // discount_id: discount_id ? discount_id[0]: null,
                 shipping_id: shipping_id ? shipping_id[0] : null,
                 tax_id: tax_id ? tax_id[0] : null,
                 tags: tags ? tags[0] : null
             });
+
+            if(discount_id){
+                await productDiscount.createProductDiscounts({
+                    product_id: product.id,
+                    discount_id: discount_id
+                });
+            }
+
 
             //Add product categories
             await Promise.all(categories[0].slice(1, -1).split(',').map(Number).map(async (category) => {
