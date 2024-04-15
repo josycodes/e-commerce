@@ -47,7 +47,9 @@ export const create = async (req, res, next) => {
             if(!imagesArray[0]) {
                 return res.status(400).json({
                     status: false,
-                    message: "product gallery is required"
+                    message: "product gallery is required",
+                    request_data: product_gallery,
+                    images_array: imagesArray
                 });
             }
 
