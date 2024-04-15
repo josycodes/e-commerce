@@ -33,7 +33,10 @@ export const create = async (req, res, next) => {
 
             // Access form fields
             const { name, description, variants, categories, tags, measuring_unit, sku, discount_id, tax_id, shipping_id } = fields;
-            const { product_gallery } = files;
+            // const { product_gallery } = files;
+
+            const product_gallery = files['product_gallery[]'];
+
 
             //Field Validation
             if (!name || !description || !variants || !categories) {
@@ -44,6 +47,14 @@ export const create = async (req, res, next) => {
             }
 
             const imagesArray = Array.isArray(product_gallery) ? product_gallery : [product_gallery];
+
+            return res.status(400).json({
+                status: false,
+                message: "product gallery is required",
+                request_data: product_gallery,
+                imagesArray: imagesArray
+            });
+
             if(!imagesArray[0]) {
                 return res.status(400).json({
                     status: false,
