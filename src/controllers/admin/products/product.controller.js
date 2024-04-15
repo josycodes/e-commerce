@@ -42,16 +42,25 @@ export const create = async (req, res, next) => {
                     message: "Missing required fields: name, description, variants, collections"
                 });
             }
+            console.log(product_gallery, '==================================');
 
             const imagesArray = Array.isArray(product_gallery) ? product_gallery : [product_gallery];
-            if(!imagesArray[0]) {
-                return res.status(400).json({
-                    status: false,
-                    message: "product gallery is required",
-                    request_data: product_gallery,
-                    images_array: imagesArray
-                });
-            }
+
+            return res.status(400).json({
+                status: false,
+                message: "product gallery is required",
+                request_data: product_gallery,
+                images_array: imagesArray
+            });
+
+            // if(!imagesArray[0]) {
+            //     return res.status(400).json({
+            //         status: false,
+            //         message: "product gallery is required",
+            //         request_data: product_gallery,
+            //         images_array: imagesArray
+            //     });
+            // }
 
             await Promise.all(imagesArray.map(image => {
                 return new Promise((resolve, reject) => {
