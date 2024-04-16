@@ -21,12 +21,20 @@ export default class ProductService{
         return await this.dbInstance.findAllLIKE(this.table,options);
     }
 
+    async findProductGroupBy(columnName){
+        return await this.dbInstance.groupByWithCount(this.table,columnName);
+    }
+
     async updateProduct(options, data){
         return await this.dbInstance.updateAndFetch(this.table,options, data);
     }
 
     async findAll(options){
         return await this.dbInstance.findAll(this.table, options);
+    }
+
+    async findAllOrderByRaw(columnName, rawQuery, limit){
+        return this.dbInstance.orderByRaw(this.table,columnName,rawQuery, limit);
     }
 
     async findAllCount(options){

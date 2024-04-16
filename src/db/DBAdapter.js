@@ -107,6 +107,16 @@ export default class DBAdapter {
         }
     }
 
+    async groupByWithCount(table, columnName){
+        try{
+            LoggerLib.log('groupByWithCount', {table, columnName});
+            return await this.db(table).select(columnName).count('*').groupBy(columnName);
+        }
+        catch (error) {
+            throw new ErrorLib('Error groupByWithCount data ' + error.message);
+        }
+    }
+
     async findAndCount(table,options= {}){
         try{
             LoggerLib.log('findAndCount', {table, options});
@@ -114,6 +124,26 @@ export default class DBAdapter {
         }
         catch (error) {
             throw new ErrorLib('Error finding and counting data ' + error.message);
+        }
+    }
+
+    async groupBy(table,columnName, limit){
+        try{
+            LoggerLib.log('groupBy', {table, columnName, limit});
+            return await this.db(table).select(columnName).groupBy(columnName).limit(limit);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding and groupingBy data ' + error.message);
+        }
+    }
+
+    async orderByRaw(table,columnName,rawQuery, limit){
+        try{
+            LoggerLib.log('groupBy', {table, columnName,rawQuery, limit});
+            return await this.db(table).select(columnName).orderByRaw(columnName).limit(limit);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding and groupingBy data ' + error.message);
         }
     }
 
@@ -139,6 +169,7 @@ export default class DBAdapter {
 
     async getTotalOfColumn(table, columnName, options) {
         try {
+            LoggerLib.log('getTotalOfColumn', {table, columnName, options});
             const result = await this.db(table).sum(columnName).where(options);
             return result[Object.keys(result)[0]];
         } catch (error) {
@@ -148,9 +179,19 @@ export default class DBAdapter {
 
     async queryRaw(table, columnName, operator,value){
         try{
+            LoggerLib.log('queryRaw', {table, columnName, operator, value});
             return await this.db(table).where(columnName, operator, value);
         }catch (error) {
-            throw new ErrorLib('Error occurred while getting Raq Query: ' + error.message);
+            throw new ErrorLib('Error occurred while getting Raw Query: ' + error.message);
+        }
+    }
+
+    async distinctCrossJoinRaw(table, rawQuery, columnName1, columnName2){
+        try{
+            LoggerLib.log('distinctCrossJoinRaw', {table, rawQuery});
+            return await this.db(table).joinRaw(rawQuery).distinct(columnName1, columnName2);
+        }catch (error) {
+            throw new ErrorLib('Error occurred while getting Distinct Cross Join Raw: ' + error.message);
         }
     }
 

@@ -2,7 +2,12 @@ import express from "express";
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 const router = express.Router();
-import {filterProducts, getAll, getProduct} from "../../../controllers/user/products/product.controller.js";
+import {
+    filterProducts,
+    getAll,
+    getProduct, productReviews, productShipping, productVariants, randomProducts,
+    trendingProducts
+} from "../../../controllers/user/products/product.controller.js";
 import {authorizeRequest} from "../../../middleware/authentication.middleware.js";
 router.use(authorizeRequest);
 
@@ -27,5 +32,12 @@ router.post('/filter',
         }),
     }),
     filterProducts);
+
+
+router.get('/filter/trending',  trendingProducts);
+router.get('/filter/random',  randomProducts);
+router.get('/filter/variants',  productVariants);
+router.get('/filter/reviews',  productReviews);
+router.get('/filter/shipping',  productShipping);
 
 export default router;

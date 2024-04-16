@@ -10,4 +10,8 @@ export default class OrderItemService {
     async getOrderItems(options){
         return await this.dbInstance.findAll(this.table, options);
     }
+
+    async getProductOrderGroupBy(columnName, limit){
+        return this.dbInstance.groupBy(this.table,columnName, limit);
+    }
 }

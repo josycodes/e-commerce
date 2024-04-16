@@ -23,6 +23,10 @@ export default class ProductVariantService{
         return await this.dbInstance.findAll(this.table, options);
     }
 
+    async getDistinctVariantsRawQuery(rawQuery, columnName1, columnName2){
+        return this.dbInstance.distinctCrossJoinRaw(this.table, rawQuery, columnName1, columnName2);
+    }
+
     async getTotalStock(column_name, options){
         return this.dbInstance.getTotalOfColumn(this.table,column_name, options);
     }

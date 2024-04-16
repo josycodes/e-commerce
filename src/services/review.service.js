@@ -19,4 +19,8 @@ export default class ReviewService{
     async findAllReviews(options){
         return await this.dbInstance.findAll(this.table, options);
     }
+
+    async findAllReviewsGroupBy(columnName){
+        return await this.dbInstance.groupByWithCount(this.table, columnName);
+    }
 }
