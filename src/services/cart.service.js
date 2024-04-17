@@ -16,12 +16,16 @@ export default class CartService{
         return await this.dbInstance.createAndFetch(this.table, options);
     }
 
-    async updateCart(options){
-        return await this.dbInstance.updateAndFetch(this.table, options);
+    async updateCart(options, data){
+        return await this.dbInstance.update(this.table, options, data);
     }
 
     async findCartItem(options){
         return await this.dbInstance.findOne(this.table,options);
+    }
+
+    async deleteCartItem(options){
+        return await this.dbInstance.delete(this.table,options);
     }
 
     async findAllCartItems(options){

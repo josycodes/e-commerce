@@ -28,6 +28,38 @@ export const getProduct = async (req, res, next) => {
     }
 }
 
+export const similarProducts = async (req, res, next) => {
+    const productService = new ProductService();
+    const productCategoryService = new ProductCategoriesService()
+    try{
+        const { limit, page } = req.query;
+        const { product_id } = req.params;
+
+        const product_categories = await productCategoryService.findProductCategory({ product_id });
+        const product_ids = product_categories.map(category => category.product_id);
+
+
+        const data = await productService.findAllWhereInOptionsPaginate('id',product_ids,{published: true}, limit, page);
+        if(!data) throw new NotFound('Products not found');
+        const total = parseInt(data.total[0].count);
+        const products = data.data;
+
+        const productsDTO = await Promise.all(products.map(async (product) => {
+            return await ProductMapper.userdataDTO({...product});
+        }));
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Product Loaded Successfully",
+            data: productsDTO,
+            meta: UtilsService.paginate(req.query, {total})
+        });
+    }
+    catch (error) {
+        next(error)
+    }
+}
+
 export const getAll = async(req, res, next) => {
     const productService = new ProductService();
     try{

@@ -15,4 +15,17 @@ export default class DiscountMapper {
             discounted_products: discounted_data ? discounted_data : null
         };
     }
+
+    static toUserDTO(data) {
+        return {
+            title: data.title,
+            code: data.code,
+            discount_type: data.discount_type,
+            value: data.value,
+            description: data.description,
+            start_date: data.start_date,
+            end_date: data.end_date,
+            status: data.status,
+        };
+    }
 }

@@ -27,7 +27,7 @@ export default class ReviewMapper {
         //Reviews with User(Reviewer) Data
         const userService = new UserService();
         const user_data = await userService.findUser({id: data.user_id})
-        const { user } = UserMapper.toDTO({...user_data});
+        const { user } = UserMapper.toViewDTO({...user_data});
         return {
             rating: data.rating,
             review: data.comment,

@@ -19,5 +19,7 @@ export const TABLE = {
     SALES_LOCATION: 'sales_location',
     DISCOUNT: 'discounts',
     PRODUCT_DISCOUNT: 'product_discounts',
-    REVIEW: 'reviews'
+    REVIEW: 'reviews',
+    RECENTLY_VIEW: 'recently_views',
+    TAXES: 'taxes',
 };

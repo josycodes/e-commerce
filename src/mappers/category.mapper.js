@@ -25,6 +25,7 @@ export default class CategoryMapper {
                 slug: data.slug,
                 description: data.description,
                 status: data.status,
+                image: data.image,
                 products: productsDTO,
                 total_products_count: product_categories.length,
                 published_products_count: publishedCount,
@@ -38,6 +39,7 @@ export default class CategoryMapper {
                 slug: data.slug,
                 description: data.description,
                 status: data.status,
+                image: data.image,
                 products: null,
                 created_at: data.created_at
             }

@@ -87,12 +87,11 @@ export default class DBAdapter {
         }
     }
 
-    async findAllLIKE(table, options){
-        try{
+    async findAllLIKE(table, options) {
+        try {
             LoggerLib.log('find', {table, options});
             return await this.db(table).whereILike(options.columnName, options.search);
-        }
-        catch (error) {
+        } catch (error) {
             throw new ErrorLib('Error finding LIKE data ' + error.message);
         }
     }
@@ -139,11 +138,21 @@ export default class DBAdapter {
 
     async orderByRaw(table,columnName,rawQuery, limit){
         try{
-            LoggerLib.log('groupBy', {table, columnName,rawQuery, limit});
+            LoggerLib.log('orderByRaw', {table, columnName,rawQuery, limit});
             return await this.db(table).select(columnName).orderByRaw(columnName).limit(limit);
         }
         catch (error) {
-            throw new ErrorLib('Error finding and groupingBy data ' + error.message);
+            throw new ErrorLib('Error finding and orderByRaw data ' + error.message);
+        }
+    }
+
+    async orderByFindOne(table,columnName,order, limit){
+        try{
+            LoggerLib.log('orderBy', {table, columnName,order, limit});
+            return await this.db(table).select('*').orderBy(columnName, order).limit(limit);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding and orderBy data ' + error.message);
         }
     }
 

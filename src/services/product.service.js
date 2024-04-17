@@ -68,6 +68,20 @@ export default class ProductService{
         }))
     }
 
+    async productVariantsUser(product_id){
+        const variants = await this.productVariantService.findVariants({ product_id: product_id });
+
+        return await Promise.all(variants.map(async (variant) => {
+            return {
+                id: variant.id,
+                variant: variant.variants,
+                price: variant.sale_price,
+                stock: variant.stock,
+                image: variant.image
+            }
+        }))
+    }
+
     async findOneProductVariant(product_id){
         const variant = await this.productVariantService.findProductVariant({ product_id });
         return {

@@ -7,9 +7,7 @@ import {
     getAll,
     getProduct, productReviews, productShipping, productVariants, randomProducts, similarProducts,
     trendingProducts
-} from "../../../controllers/user/products/product.controller.js";
-import {authorizeRequest} from "../../../middleware/authentication.middleware.js";
-router.use(authorizeRequest);
+} from "../../controllers/user/products/product.controller.js";
 
 router.get('/all', getAll);
 
@@ -55,7 +53,8 @@ router.post('/filter',
             ).optional()
         }),
     }),
-    filterProducts);
+    filterProducts
+);
 
 
 router.get('/filter/trending',  trendingProducts);

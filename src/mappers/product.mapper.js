@@ -87,7 +87,7 @@ export default class ProductMapper {
         const shippingService = new ShippingMethodService();
 
         const total_stock = await productService.productTotalStock(data.id);
-        const variants = await productService.productVariants(data.id);
+        const variants = await productService.productVariantsUser(data.id);
         const orderItemService = new OrderItemService();
         const orderItems = await orderItemService.getOrderItems({ product_id: data.id });
 

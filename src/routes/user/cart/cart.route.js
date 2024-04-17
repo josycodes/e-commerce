@@ -3,49 +3,43 @@ import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 const router = express.Router();
 import {authorizeRequest} from "../../../middleware/authentication.middleware.js";
-import {addToCart, listCartItems} from "../../../controllers/user/cart/cart.controller.js";
+import {
+    addToCart,
+    listCartItems,
+    removeCartItem,
+    updateCartItem
+} from "../../../controllers/user/cart/cart.controller.js";
 router.use(authorizeRequest);
 
 router.post('/add',
     celebrate({
         [Segments.BODY]: Joi.object({
-            product_id: Joi.number(),
-            product_variant_id: Joi.number(),
-            quantity: Joi.number()
+            product_id: Joi.number().required(),
+            product_variant_id: Joi.number().required(),
+            quantity: Joi.number().required()
         }),
     }),
     addToCart);
 
 router.get('/list', listCartItems);
 
-// router.post('/:cart_id',
-//     celebrate({
-//         [Segments.BODY]: Joi.object({
-//             min_price: Joi.number().positive().optional(),
-//             max_price: Joi.number().positive().optional(),
-//             collection_id: Joi.array().optional()
-//         }),
-//     }),
-//     getCartItem);
+router.post('/update/:product_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            product_id: Joi.number().required()
+        }),
+        [Segments.BODY]: Joi.object({
+            type: Joi.string().valid('add', 'remove')
+        }),
+    }),
+    updateCartItem);
 
-// router.post('/:cart_id/update',
-//     celebrate({
-//         [Segments.BODY]: Joi.object({
-//             min_price: Joi.number().positive().optional(),
-//             max_price: Joi.number().positive().optional(),
-//             collection_id: Joi.array().optional()
-//         }),
-//     }),
-//     updateCartItem);
-
-// router.post('/:cart_id/remove',
-//     celebrate({
-//         [Segments.BODY]: Joi.object({
-//             min_price: Joi.number().positive().optional(),
-//             max_price: Joi.number().positive().optional(),
-//             collection_id: Joi.array().optional()
-//         }),
-//     }),
-//     removeCartItem);
+router.get('/remove/:product_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            product_id: Joi.number().required()
+        })
+    }),
+    removeCartItem);
 
 export default router;

@@ -10,4 +10,12 @@ export default class UserMapper {
             token: data.token ? data.token : null
         }
     }
+
+    static toViewDTO(data) {
+        return {
+            user: {
+                name: data.name
+            }
+        }
+    }
 }
