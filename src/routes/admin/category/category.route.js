@@ -10,15 +10,6 @@ router.use(authorizeRequest);
 //Create Category
 router.post(
     '/add',
-    celebrate({
-        [Segments.BODY]: Joi.object({
-            name: Joi.string().required(),
-            slug: Joi.string().optional(),
-            description: Joi.string().optional(),
-            status: Joi.boolean().optional(),
-            products: Joi.array().optional()
-        })
-    }),
     create
 );
 

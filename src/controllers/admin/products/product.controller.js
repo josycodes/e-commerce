@@ -53,7 +53,6 @@ export const create = async (req, res, next) => {
 
             for (let i = 0; i < 7; i++) {
                 const key = `product_gallery${i}`;
-                console.log(files[key], key,'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
 
                 if(files[key]) {
                     const [productImage] = files[key];

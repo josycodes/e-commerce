@@ -12,6 +12,7 @@ exports.up = function(knex) {
         table.string('slug').nullable();
         table.text('description').nullable();
         table.boolean('status').defaultTo(true);
+        table.string('image').nullable();
         table.timestamps(true, true); // Add 'created_at' and 'updated_at' columns
     });
 };
