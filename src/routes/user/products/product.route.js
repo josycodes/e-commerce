@@ -24,11 +24,21 @@ router.get('/id/:product_id',
 
 router.post('/filter',
     celebrate({
+        [Segments.QUERY]: Joi.object({
+            page: Joi.number().positive().default(1),
+            limit: Joi.number().positive().default(10).max(100),
+        }),
         [Segments.BODY]: Joi.object({
             search:Joi.string().optional(),
             min_price: Joi.number().positive().optional(),
             max_price: Joi.number().positive().optional(),
-            category_id: Joi.array().optional()
+            category_id: Joi.array().optional(),
+            shipping_id: Joi.array().optional(),
+            rating: Joi.array().optional(),
+            variants: Joi.object().pattern(
+                Joi.string(),
+                Joi.array().items(Joi.any()) // Specify that values must be arrays
+            ).optional()
         }),
     }),
     filterProducts);

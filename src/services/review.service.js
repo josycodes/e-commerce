@@ -23,4 +23,8 @@ export default class ReviewService{
     async findAllReviewsGroupBy(columnName){
         return await this.dbInstance.groupByWithCount(this.table, columnName);
     }
+
+    async findAllWhereIn(columnName, data){
+        return await this.dbInstance.findWhereIn(this.table,columnName,data);
+    }
 }

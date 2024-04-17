@@ -157,6 +157,16 @@ export default class DBAdapter {
         }
     }
 
+    async findWhereRaw(table, query){
+        try{
+            LoggerLib.log('findWhereRaw', {table, query});
+            return await this.db(table).whereRaw(query);
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding data findWhereRaw ' + error.message);
+        }
+    }
+
     async findWhereInOptions(table, columnName, data= [], options = {}){
         try{
             LoggerLib.log('findWhereInOptions', {table, columnName, data});
@@ -164,6 +174,18 @@ export default class DBAdapter {
         }
         catch (error) {
             throw new ErrorLib('Error finding data WhereIn Options ' + error.message);
+        }
+    }
+    async findWhereInOptionsPaginate(table, columnName, data= [], options = {}, limit, page){
+        try{
+            LoggerLib.log('findWhereInOptionsPaginate', {table, columnName, data, limit, page});
+            return {
+                data: await this.db(table).whereIn(columnName,data).where(options).limit(limit).offset((page - 1) * limit),
+                total: await this.db(table).whereIn(columnName,data).where(options).count()
+            };
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding data findWhereInOptionsPaginate ' + error.message);
         }
     }
 
@@ -183,6 +205,15 @@ export default class DBAdapter {
             return await this.db(table).where(columnName, operator, value);
         }catch (error) {
             throw new ErrorLib('Error occurred while getting Raw Query: ' + error.message);
+        }
+    }
+
+    async whereBetween(table, columnName,options){
+        try{
+            LoggerLib.log('whereBetween', {table, columnName, options});
+            return await this.db(table).whereBetween(columnName,options);
+        }catch (error) {
+            throw new ErrorLib('Error occurred while getting whereBetween: ' + error.message);
         }
     }
 

@@ -23,6 +23,10 @@ export default class ProductVariantService{
         return await this.dbInstance.findAll(this.table, options);
     }
 
+    async whereRaw(query){
+        return await this.dbInstance.findWhereRaw(this.table, query);
+    }
+
     async getDistinctVariantsRawQuery(rawQuery, columnName1, columnName2){
         return this.dbInstance.distinctCrossJoinRaw(this.table, rawQuery, columnName1, columnName2);
     }
@@ -31,17 +35,18 @@ export default class ProductVariantService{
         return this.dbInstance.getTotalOfColumn(this.table,column_name, options);
     }
 
-    async filterQuery(options){
+    async filterQuery(options, columnName){
         const results = [];
 
-        if (options.max_price !== undefined) {
-            const query1 = await this.dbInstance.queryRaw(this.table, 'sale_price', '<', options.max_price);
+        if (options.max_price !== undefined && options.min_price) {
+            const query1 = await this.dbInstance.queryRaw(this.table, columnName, '<', options.max_price);
             results.push(query1);
-        }
-
-        if (options.min_price !== undefined) {
-            const query2 = await this.dbInstance.queryRaw(this.table,'sale_price', '>', options.min_price);
+        }else if (options.min_price !== undefined && options.max_price) {
+            const query2 = await this.dbInstance.queryRaw(this.table,columnName, '>', options.min_price);
             results.push(query2);
+        }else{
+            const query3 = await this.dbInstance.whereBetween(this.table, columnName,[options.min_price, options.max_price]);
+            results.push(query3);
         }
 
         // Execute all queries concurrently

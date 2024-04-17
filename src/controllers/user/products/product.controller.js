@@ -8,6 +8,7 @@ import ProductCategoriesService from "../../../services/product_categories.servi
 import OrderItemService from "../../../services/order_item.service.js";
 import ReviewService from "../../../services/review.service.js";
 import ShippingMethodService from "../../../services/shipping_method.service.js";
+import UtilsService from "../../../services/Utils.service.js";
 
 export const getProduct = async (req, res, next) => {
     const productService = new ProductService();
@@ -50,7 +51,9 @@ export const filterProducts = async (req, res, next) => {
     const productVariantService = new ProductVariantService();
     const productCategoryService = new ProductCategoriesService();
     const productService = new ProductService();
-    const { min_price, max_price, category_id, search } = req.body;
+    const reviewService = new ReviewService();
+    const { page, limit } = req.query;
+    const { min_price, max_price, category_id, search, shipping_id, rating, variants } = req.body;
     let productIDs = [];
     const options = {};
     try{
@@ -63,7 +66,7 @@ export const filterProducts = async (req, res, next) => {
             if (min_price !== undefined) {
                 options.min_price = min_price;
             }
-            const result = await productVariantService.filterQuery(options);
+            const result = await productVariantService.filterQuery(options, 'sale_price');
 
             result.forEach(row => {
                 productIDs.push(row.product_id);
@@ -76,6 +79,7 @@ export const filterProducts = async (req, res, next) => {
                 productIDs.push(row.product_id);
             });
         }
+
         if(search){
             const result3 = await productService.findProductLIKE({columnName: 'name',search: `%${search}%`});
             result3.forEach(row => {
@@ -83,10 +87,43 @@ export const filterProducts = async (req, res, next) => {
             });
         }
 
+        if(shipping_id){
+            const result4 = await productService.findAllWhereInOptions('shipping_id',shipping_id, {published: true});
+            result4.forEach(row => {
+                productIDs.push(row.id);
+            });
+        }
+
+        if(rating){
+            const result5 = await reviewService.findAllWhereIn('rating', rating);
+            result5.forEach(row => {
+                productIDs.push(row.product_id);
+            });
+        }
+
+        if(variants){
+            const keys = Object.keys(variants);
+
+            const query = keys.map(key => {
+                const values = variants[key];
+                return `variants->>'${key}' IN ('${values.join("','")}')`;
+            }).join(' OR ');
+
+            const sql = `${query}`;
+            const result6 = await productVariantService.whereRaw(sql);
+            result6.forEach(row => {
+                productIDs.push(row.product_id);
+            });
+        }
+
         //merge productIDs
         const uniqueProductIDs = [...new Set(productIDs)];
 
-        const products = await productService.findAllWhereInOptions('id', uniqueProductIDs, {published: true});
+        const data = await productService.findAllWhereInOptionsPaginate('id', uniqueProductIDs, {published: true}, limit, page);
+        const total = parseInt(data.total[0].count);
+        const products = data.data;
+
+
         const productsDTO = await Promise.all(products.map(async (product) => {
             return ProductMapper.userdataDTO({...product});
         }));
@@ -94,7 +131,8 @@ export const filterProducts = async (req, res, next) => {
         return new ResponseLib(req, res).json({
             status: true,
             message: "Products Loaded",
-            data: productsDTO
+            data: productsDTO,
+            meta: UtilsService.paginate(req.query, { items: productsDTO, total: total })
         });
     }
     catch (error) {

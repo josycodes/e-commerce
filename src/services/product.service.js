@@ -48,6 +48,9 @@ export default class ProductService{
     async findAllWhereInOptions(columnName, data, options){
         return await this.dbInstance.findWhereInOptions(this.table,columnName,data, options);
     }
+    async findAllWhereInOptionsPaginate(columnName, data, options, limit, page){
+        return await this.dbInstance.findWhereInOptionsPaginate(this.table,columnName,data, options, limit,page);
+    }
 
     async productVariants(product_id){
         const variants = await this.productVariantService.findVariants({ product_id: product_id });
