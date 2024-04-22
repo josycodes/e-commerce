@@ -1,4 +1,4 @@
-import { banners } from "../../controllers/service/banner.controller.js";
+import { banners } from "../../../controllers/user/banner/banner.controller.js";
 import express from "express";
 const router = express.Router();
 

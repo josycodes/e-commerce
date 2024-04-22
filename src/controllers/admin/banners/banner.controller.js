@@ -1,7 +1,5 @@
 import ErrorLib, { BadRequest, NotFound } from "../../../libs/Error.lib.js";
 import ResponseLib from "../../../libs/Response.lib.js";
-import CategoryService from "../../../services/category.service.js";
-import CategoryMapper from "../../../mappers/category.mapper.js";
 import {IncomingForm} from "formidable";
 import CloudinaryIntegration from "../../../integrations/cloudinary.integration.js";
 import BannerService from "../../../services/banner.service.js";

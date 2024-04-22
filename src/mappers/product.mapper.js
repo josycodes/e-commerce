@@ -41,24 +41,44 @@ export default class ProductMapper {
             }
         }
 
+        if(variants.length > 0){
+            // Extract unique properties dynamically
+            const uniqueProperties = variants.reduce((acc, item) => {
+                Object.keys(item.variant).forEach(key => {
+                    if (!acc[key]) {
+                        acc[key] = [];
+                    }
+                    if (item.variant[key]) {
+                        acc[key].push(item.variant[key]);
+                    }
+                });
+                return acc;
+            }, {});
+
+            // Remove duplicates from each property
+            Object.keys(uniqueProperties).forEach(key => {
+                uniqueProperties[key] = Array.from(new Set(uniqueProperties[key]));
+            });
+        }
+
+
         return {
-            product: {
-                id: data.id,
-                name: data.name,
-                description: data.description,
-                published: data.published,
-                images: data.images,
-                sku: data.sku,
-                tags: data.tags,
-                measuring_unit: data.measuring_unit,
-                variants,
-                total_stock,
-                quantity_sold: orderItems.length,
-                revenue: totalSalePrice,
-                last_sold_at: latestOrderItem,
-                created_at: data.created_at,
-                updated_at: data.updated_at
-            }
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            published: data.published,
+            images: data.images,
+            sku: data.sku,
+            tags: data.tags,
+            measuring_unit: data.measuring_unit,
+            variants_array: uniqueProperties ? uniqueProperties : null,
+            variants,
+            total_stock,
+            quantity_sold: orderItems.length,
+            revenue: totalSalePrice,
+            last_sold_at: latestOrderItem,
+            created_at: data.created_at,
+            updated_at: data.updated_at
         };
     }
 
@@ -66,15 +86,13 @@ export default class ProductMapper {
         const productService = new ProductService();
         const total_stock = await productService.productTotalStock(data.id);
         return {
-            product: {
-                id: data.id,
-                name: data.name,
-                description: data.description,
-                images: data.images,
-                published: data.published,
-                total_stock,
-                created_at: data.created_at
-            }
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            images: data.images,
+            published: data.published,
+            total_stock,
+            created_at: data.created_at
         };
     }
 
@@ -93,7 +111,27 @@ export default class ProductMapper {
         const discountsIds = discount_products.map(discount_product => discount_product.discount_id);
         const discounts = await discountService.findAllDiscountsWhereIn('id', discountsIds);
 
+        // Extract unique properties dynamically
+        const uniqueProperties = variants.reduce((acc, item) => {
+            Object.keys(item.variant).forEach(key => {
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                if (item.variant[key]) {
+                    acc[key].push(item.variant[key]);
+                }
+            });
+            return acc;
+        }, {});
+
+        // Remove duplicates from each property
+        Object.keys(uniqueProperties).forEach(key => {
+            uniqueProperties[key] = Array.from(new Set(uniqueProperties[key]));
+        });
+
         let reviewsDTO = null;
+        let averageRating = null;
+        let ratingCountsData = null;
         if(reviews){
             const reviews = await reviewService.findAllReviews({product_id: data.id});
             reviewsDTO = await Promise.all(reviews.map(async (review) => {
@@ -111,56 +149,33 @@ export default class ProductMapper {
                 return accumulator;
             }, { totalRating: 0, reviewCount: 0, ratingCounts: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 } });
             // Calculate the average rating
-            const averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+            averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
 
-            return {
-                product: {
-                    id: data.id,
-                    name: data.name,
-                    description: data.description,
-                    published: data.published,
-                    images: data.images,
-                    sku: data.sku,
-                    tags: data.tags,
-                    measuring_unit: data.measuring_unit,
-                    variants,
-                    total_stock,
-                    quantity_sold: orderItems.length,
-                    created_at: data.created_at,
-                    discount: discounts,
-                    reviews: reviewsDTO,
-                    rating_analytics: {
-                        averageRating,
-                        total_ratings: reviewsDTO.length,
-                        ratingCounts
-                    }
-                }
-            };
-        }else{
-            return {
-                product: {
-                    id: data.id,
-                    name: data.name,
-                    description: data.description,
-                    published: data.published,
-                    images: data.images,
-                    sku: data.sku,
-                    tags: data.tags,
-                    measuring_unit: data.measuring_unit,
-                    variants,
-                    total_stock,
-                    quantity_sold: orderItems.length,
-                    created_at: data.created_at,
-                    discount: discounts,
-                    reviews: reviewsDTO,
-                    rating_analytics: {
-                        averageRating:null,
-                        ratingCounts: null
-                    }
-                }
-            };
+            ratingCountsData = ratingCounts;
+
         }
 
-
+        return {
+            id: data.id,
+            name: data.name,
+            description: data.description,
+            published: data.published,
+            images: data.images,
+            sku: data.sku,
+            tags: data.tags,
+            measuring_unit: data.measuring_unit,
+            variants_array: uniqueProperties ? uniqueProperties : null,
+            variants,
+            total_stock,
+            quantity_sold: orderItems.length,
+            created_at: data.created_at,
+            discount: discounts,
+            reviews: reviewsDTO,
+            rating_analytics: {
+                averageRating,
+                total_ratings: reviewsDTO.length,
+                ratingCounts: ratingCountsData
+            }
+        };
     }
 }

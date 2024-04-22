@@ -5,7 +5,7 @@ import express from "express";
 const router = express.Router();
 
 router.use('/product', product);
-router.use('/banner', banner);
+router.use('/banners', banner);
 router.get('/countries', countries );
 
 export default router;
