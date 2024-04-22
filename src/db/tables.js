@@ -22,4 +22,7 @@ export const TABLE = {
     REVIEW: 'reviews',
     RECENTLY_VIEW: 'recently_views',
     TAXES: 'taxes',
+    BANNER: 'banners',
+    CATEGORY_BANNER: 'category_banners',
+    COUNTDOWN_BANNER: 'countdown_banners'
 };

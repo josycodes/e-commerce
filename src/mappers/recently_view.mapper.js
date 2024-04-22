@@ -4,7 +4,6 @@ import ReviewMapper from "./review.mapper.js";
 import ProductDiscountService from "../services/product_discount.service.js";
 import DiscountService from "../services/discount.service.js";
 import ReviewService from "../services/review.service.js";
-import ShippingMethodService from "../services/shipping_method.service.js";
 import DiscountMapper from "./discount.mapper.js";
 
 export default class RecentlyViewMapper {
@@ -13,7 +12,6 @@ export default class RecentlyViewMapper {
         const productDiscountService = new ProductDiscountService();
         const discountService = new DiscountService();
         const reviewService = new ReviewService();
-        const shippingService = new ShippingMethodService();
 
         const total_stock = await productService.productTotalStock(data.product_id);
         const product = await productService.findProduct({id: data.product_id});
@@ -28,13 +26,6 @@ export default class RecentlyViewMapper {
         const discountDTO = await Promise.all(discounts.map(async (discount) => {
             return DiscountMapper.toUserDTO({...discount});
         }));
-
-        //Shipping for product
-        const shipping = await shippingService.findShippingMethod({id: product.shipping_id});
-        let shipping_conditions = null;
-        if(shipping){
-            shipping_conditions = await shippingService.getShippingMethodConditions(shipping.type, {shipping_method_id: shipping.id});
-        }
 
         let reviewsDTO = null;
 
@@ -77,10 +68,6 @@ export default class RecentlyViewMapper {
                     averageRating,
                     total_ratings: reviewsDTO.length,
                     ratingCounts
-                },
-                shipping:{
-                    shipping: shipping ? shipping: null,
-                    shipping_conditions
                 }
             }
         };

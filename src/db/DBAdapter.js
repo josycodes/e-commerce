@@ -49,7 +49,7 @@ export default class DBAdapter {
         }
     }
 
-    async updateFirstAndFetch(table, options, data){
+    async updateFirstAndFetch(table, options = {}, data){
         try{
             LoggerLib.log('updateAndFetch', { table, options, data });
             const [updated] = await this.db(table).first().returning('id').update(data);

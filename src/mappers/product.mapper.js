@@ -4,7 +4,6 @@ import ProductDiscountService from "../services/product_discount.service.js";
 import DiscountService from "../services/discount.service.js";
 import ReviewMapper from "./review.mapper.js";
 import ReviewService from "../services/review.service.js";
-import ShippingMethodService from "../services/shipping_method.service.js";
 
 export default class ProductMapper {
     static async toDTO(data) {
@@ -84,7 +83,6 @@ export default class ProductMapper {
         const productDiscountService = new ProductDiscountService();
         const discountService = new DiscountService();
         const reviewService = new ReviewService();
-        const shippingService = new ShippingMethodService();
 
         const total_stock = await productService.productTotalStock(data.id);
         const variants = await productService.productVariantsUser(data.id);
@@ -94,13 +92,6 @@ export default class ProductMapper {
         const discount_products = await productDiscountService.getAllProductDiscounts({product_id: data.id});
         const discountsIds = discount_products.map(discount_product => discount_product.discount_id);
         const discounts = await discountService.findAllDiscountsWhereIn('id', discountsIds);
-
-        //Shipping for product
-        const shipping = await shippingService.findShippingMethod({id: data.shipping_id});
-        let shipping_conditions = null;
-        if(shipping){
-            shipping_conditions = await shippingService.getShippingMethodConditions(shipping.type, {shipping_method_id: shipping.id});
-        }
 
         let reviewsDTO = null;
         if(reviews){
@@ -142,10 +133,6 @@ export default class ProductMapper {
                         averageRating,
                         total_ratings: reviewsDTO.length,
                         ratingCounts
-                    },
-                    shipping:{
-                        shipping,
-                        shipping_conditions
                     }
                 }
             };
@@ -169,10 +156,6 @@ export default class ProductMapper {
                     rating_analytics: {
                         averageRating:null,
                         ratingCounts: null
-                    },
-                    shipping:{
-                        shipping,
-                        shipping_conditions
                     }
                 }
             };

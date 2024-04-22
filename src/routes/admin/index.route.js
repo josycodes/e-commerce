@@ -6,6 +6,7 @@ import shipping from "./shipping/index.route.js";
 import discount from "./discount/discount.route.js";
 import customer from "./customer/customer.route.js";
 import tax from "./tax/tax.route.js";
+import banner from "./banners/banner.route.js";
 import express from "express";
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use('/shipping', shipping);
 router.use('/discount', discount);
 router.use('/customer', customer);
 router.use('/tax', tax);
+router.use('/banners', banner);
 
 export default router;
