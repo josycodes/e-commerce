@@ -8,10 +8,7 @@ const router = express.Router();
 router.use(authorizeRequest);
 
 //Create Category
-router.post(
-    '/add',
-    create
-);
+router.post('/add', create);
 
 //Get All Category
 router.get('/all', getAll);

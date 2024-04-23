@@ -12,12 +12,13 @@ export default class CategoryMapper {
         if(product_categories.length > 0){
             const productsDTO = await Promise.all(product_categories.map(async (product_category) => {
                const product = await productService.findProduct({id: product_category.product_id});
-               return await ProductMapper.toDTO({...product});
+               return await ProductMapper.toDTO1({...product});
             }));
+
             // Count published products
-            const publishedCount = productsDTO.filter(item => item.product.published).length;
+            const publishedCount = productsDTO.filter(item => item.published).length;
             // Count unpublished products
-            const unpublishedCount = productsDTO.filter(item => !item.product.published).length;
+            const unpublishedCount = productsDTO.filter(item => !item.published).length;
 
             return {
                 id: data.id,
