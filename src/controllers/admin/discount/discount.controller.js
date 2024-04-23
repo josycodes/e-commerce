@@ -4,6 +4,7 @@ import DiscountMapper from "../../../mappers/discount.mapper.js";
 import ErrorLib, {NotFound, BadRequest} from "../../../libs/Error.lib.js";
 import ProductService from "../../../services/product.service.js";
 import ProductDiscountService from "../../../services/product_discount.service.js";
+import ProductMapper from "../../../mappers/product.mapper.js";
 
 export const createDiscount = async (req, res, next) => {
     const discountService = new DiscountService();
@@ -87,6 +88,7 @@ export const getDiscountedProduct = async (req, res, next) => {
         //get Product
         const product = await productService.findProduct({id: product_id});
         if(!product) throw new NotFound('Product not Found');
+        const productDTO = await ProductMapper.toDTO({...product});
 
         //Get Discounted Product
         const discountedProduct = await discountService.getDiscountedProduct(discount, product)
@@ -95,7 +97,7 @@ export const getDiscountedProduct = async (req, res, next) => {
             status: true,
             message: "Discount Product loaded Successfully",
             data: {
-                product: product,
+                product: productDTO,
                 discount: DiscountMapper.toDTO(discount, discountedProduct)
             }
         });

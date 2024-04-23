@@ -41,9 +41,10 @@ export default class ProductMapper {
             }
         }
 
+        let uniqueProperties = null;
         if(variants.length > 0){
             // Extract unique properties dynamically
-            const uniqueProperties = variants.reduce((acc, item) => {
+            uniqueProperties = variants.reduce((acc, item) => {
                 Object.keys(item.variant).forEach(key => {
                     if (!acc[key]) {
                         acc[key] = [];
@@ -60,7 +61,6 @@ export default class ProductMapper {
                 uniqueProperties[key] = Array.from(new Set(uniqueProperties[key]));
             });
         }
-
 
         return {
             id: data.id,
