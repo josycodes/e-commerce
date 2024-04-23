@@ -58,3 +58,29 @@ export const allCustomers = async (req, res, next) => {
         next(error)
     }
 }
+
+
+export const getCustomer = async (req, res, next) => {
+    const userService = new UserService();
+    try{
+        const { customer_id } = req.params;
+
+        const customer = await userService.findUser({
+            id: customer_id
+        });
+        if(!customer) throw new BadRequest('Customer not Found');
+
+        const customerDTO = await CustomerMapper.toDTOUser({...customer});
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Customer Loaded Successfully",
+            data: customerDTO
+        });
+    } catch (error) {
+        if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
+            return next(error);
+        }
+        next(error)
+    }
+}

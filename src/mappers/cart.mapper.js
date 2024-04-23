@@ -25,22 +25,20 @@ export default class CartMapper {
         const product = await productService.findProduct({id: data.product_id});
         const variants = await productService.productVariantsUser(data.id);
         return {
-            cart_item:{
-                quantity: data.quantity,
-                product_variant_id: data.product_variant_id,
-                product: {
-                    id: product.id,
-                    name: product.name,
-                    description: product.description,
-                    published: product.published,
-                    images: product.images,
-                    sku: product.sku,
-                    tags: product.tags,
-                    measuring_unit: product.measuring_unit,
-                    total_stock,
-                    variants
-                }
-            },
+            quantity: data.quantity,
+            product_variant_id: data.product_variant_id,
+            product: {
+                id: product.id,
+                name: product.name,
+                description: product.description,
+                published: product.published,
+                images: product.images,
+                sku: product.sku,
+                tags: product.tags,
+                measuring_unit: product.measuring_unit,
+                total_stock,
+                variants
+            }
         };
     }
 }
