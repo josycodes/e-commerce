@@ -86,6 +86,15 @@ export default class DBAdapter {
             throw new ErrorLib('Error finding data ' + error.message);
         }
     }
+    async findFirst(table){
+        try{
+            LoggerLib.log('findFirst', {table});
+            return await this.db(table).first();
+        }
+        catch (error) {
+            throw new ErrorLib('Error finding First data ' + error.message);
+        }
+    }
 
     async findAllLIKE(table, options) {
         try {

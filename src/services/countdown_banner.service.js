@@ -11,8 +11,8 @@ export default class CountdownBannerService{
     async findBanner(options){
         return await this.dbInstance.findOne(this.table, options);
     }
-    async allBanners(options){
-        return await this.dbInstance.findAll(this.table, options);
+    async getBanner(){
+        return await this.dbInstance.findFirst(this.table);
     }
 
     async updateBanner(data){
