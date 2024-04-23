@@ -8,7 +8,6 @@ export const banners = async (req, res, next) => {
 
     const bannerService = new BannerService();
     const categoryBannerService = new CategoryBannerService();
-    const countdownBannerService = new CountdownBannerService();
     try {
         const banners = await bannerService.allBanners();
         const category_banners = await categoryBannerService.allBanners();

@@ -8,6 +8,7 @@ import {
     getProduct, productReviews, productShipping, productVariants, randomProducts, similarProducts,
     trendingProducts
 } from "../../controllers/user/products/product.controller.js";
+import {getAllCategoriesForFilter} from "../../controllers/user/categories/category.controller.js";
 
 router.get('/all', getAll);
 
@@ -62,5 +63,6 @@ router.get('/filter/random',  randomProducts);
 router.get('/filter/variants',  productVariants);
 router.get('/filter/reviews',  productReviews);
 router.get('/filter/shipping',  productShipping);
+router.get('/filter/categories',  getAllCategoriesForFilter);
 
 export default router;
