@@ -14,9 +14,9 @@ const router = express.Router();
 router.post('/add',
     celebrate({
         [Segments.BODY]: Joi.object({
-            name: Joi.string(),
+            name: Joi.string().required(),
             method_type: Joi.string().valid(SHIPPING_METHODS.FLAT_RATE, SHIPPING_METHODS.FREE_SHIPPING, SHIPPING_METHODS.LOCATION_BASED),
-            description: Joi.string(),
+            description: Joi.string().required(),
             status: Joi.boolean().default('true'),
             conditions: Joi.array().when('method_type', {
                 is: (SHIPPING_METHODS.FLAT_RATE || SHIPPING_METHODS.LOCATION_BASED),
