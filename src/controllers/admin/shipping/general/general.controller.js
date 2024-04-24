@@ -55,3 +55,24 @@ export const createGeneralShipping = async (req, res, next) => {
         next(error)
     }
 }
+
+export const getGeneralShipping = async (req, res, next) => {
+    const generalShippingService = new GeneralShippingService();
+
+    try{
+
+        const general_shipping = await generalShippingService. getShippingService();
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "General Shipping Updated Successfully",
+            data: await GeneralShippingMapper.toDTO({...general_shipping})
+        });
+    }
+    catch (error) {
+        if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
+            return next(error);
+        }
+        next(error)
+    }
+}

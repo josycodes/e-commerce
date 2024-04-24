@@ -18,6 +18,7 @@ export const updateMainBanner = async (req, res, next) => {
                     message: "Error Parsing form"
                 });
             }
+            const { link } = fields;
             const { desktop_image, tablet_image, mobile_image } = files;
 
             if (!desktop_image || !tablet_image || !mobile_image) {
@@ -64,6 +65,7 @@ export const updateMainBanner = async (req, res, next) => {
                 desktop_image: desktop_url,
                 tablet_image: tablet_url,
                 mobile_image: mobile_url,
+                link: link
             });
 
             return new ResponseLib(req, res).json({
@@ -89,7 +91,7 @@ export const updateSubBanner = async (req, res, next) => {
                 });
             }
 
-            const { banner_id } = fields;
+            const { banner_id, link } = fields;
             const { desktop_image, tablet_image, mobile_image } = files;
 
             const check = await bannerService.findBanner({id: banner_id[0]});
@@ -141,7 +143,8 @@ export const updateSubBanner = async (req, res, next) => {
                 banner_type: 'sub',
                 desktop_image: desktop_url,
                 tablet_image: tablet_url,
-                mobile_image: mobile_url
+                mobile_image: mobile_url,
+                link: link
             });
 
             return new ResponseLib(req, res).json({
@@ -166,7 +169,7 @@ export const updateCategoryBanner = async (req, res, next) => {
                     message: "Error Parsing form"
                 });
             }
-            const { category_id, banner_id } = fields;
+            const { category_id, banner_id, link } = fields;
             const { desktop_image, tablet_image, mobile_image } = files;
 
             if (!category_id || !desktop_image || !tablet_image || !mobile_image || !banner_id) {
@@ -218,6 +221,7 @@ export const updateCategoryBanner = async (req, res, next) => {
                 desktop_image: desktop_url,
                 tablet_image: tablet_url,
                 mobile_image: mobile_url,
+                link: link,
                 status: 'active'
             });
 

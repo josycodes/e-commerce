@@ -10,4 +10,8 @@ export default class GeneralShippingService {
     async updateShippingService(data){
         return await this.dbInstance.firstOrUpdate(this.table, data);
     }
+
+    async getShippingService(data){
+        return await this.dbInstance.findFirst(this.table, data);
+    }
 }
