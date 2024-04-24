@@ -5,9 +5,10 @@ export default class BannerMapper {
         const categoryService = new CategoryService();
         const category = await categoryService.findCategory({id: data.category_id})
         return {
-            pricing: data.pricing,
-            image: data.image,
-            category: category.name
+            desktop_image: data.desktop_image,
+            tablet_image: data.tablet_image,
+            mobile_image: data.mobile_image,
+            category: category ? category.name : null
         }
     }
 }

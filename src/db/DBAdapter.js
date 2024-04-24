@@ -13,7 +13,7 @@ export default class DBAdapter {
             return await this.db(table).insert(data);
         }
         catch (error) {
-            throw new ErrorLib('Error creating data ' + error.message);
+            throw new ErrorLib('Error creating data ' + error.message, 500);
         }
     }
 
@@ -24,7 +24,7 @@ export default class DBAdapter {
             return await this.db(table).where({ id: created.id }).first();
         }
         catch (error) {
-            throw new ErrorLib('Error creating and fetching data ' + error.message);
+            throw new ErrorLib('Error creating and fetching data ' + error.message, 500);
         }
     }
 
@@ -34,7 +34,7 @@ export default class DBAdapter {
             return await this.db(table).where(options).update(data);
         }
         catch (error) {
-            throw new ErrorLib('Error updating data ' + error.message);
+            throw new ErrorLib('Error updating data ' + error.message, 500);
         }
     }
 
@@ -45,7 +45,7 @@ export default class DBAdapter {
             return await this.db(table).where({ id: updated.id }).first();
         }
         catch (error) {
-            throw new ErrorLib('Error updating and fetching data ' + error.message);
+            throw new ErrorLib('Error updating and fetching data ' + error.message, 500);
         }
     }
 
@@ -56,7 +56,7 @@ export default class DBAdapter {
             return await this.db(table).where({ id: updated.id }).first();
         }
         catch (error) {
-            throw new ErrorLib('Error updating and fetching data ' + error.message);
+            throw new ErrorLib('Error updating and fetching data ' + error.message, 500);
         }
     }
 
@@ -73,7 +73,7 @@ export default class DBAdapter {
             }
         }
         catch (error) {
-            throw new ErrorLib('Error updating and fetching first data ' + error.message);
+            throw new ErrorLib('Error updating and fetching first data ' + error.message, 500);
         }
     }
 
@@ -83,7 +83,7 @@ export default class DBAdapter {
             return await this.db(table).where(options).first();
         }
         catch (error) {
-            throw new ErrorLib('Error finding data ' + error.message);
+            throw new ErrorLib('Error finding data ' + error.message, 500);
         }
     }
     async findFirst(table){
@@ -92,7 +92,7 @@ export default class DBAdapter {
             return await this.db(table).first();
         }
         catch (error) {
-            throw new ErrorLib('Error finding First data ' + error.message);
+            throw new ErrorLib('Error finding First data ' + error.message, 500);
         }
     }
 
@@ -101,7 +101,7 @@ export default class DBAdapter {
             LoggerLib.log('find', {table, options});
             return await this.db(table).whereILike(options.columnName, options.search);
         } catch (error) {
-            throw new ErrorLib('Error finding LIKE data ' + error.message);
+            throw new ErrorLib('Error finding LIKE data ' + error.message, 500);
         }
     }
 
@@ -111,7 +111,7 @@ export default class DBAdapter {
             return await this.db(table).where(options);
         }
         catch (error) {
-            throw new ErrorLib('Error finding data ' + error.message);
+            throw new ErrorLib('Error finding data ' + error.message, 500);
         }
     }
 
@@ -121,7 +121,7 @@ export default class DBAdapter {
             return await this.db(table).select(columnName).count('*').groupBy(columnName);
         }
         catch (error) {
-            throw new ErrorLib('Error groupByWithCount data ' + error.message);
+            throw new ErrorLib('Error groupByWithCount data ' + error.message, 500);
         }
     }
 
@@ -131,7 +131,7 @@ export default class DBAdapter {
             return await this.db(table).count('*').where(options);
         }
         catch (error) {
-            throw new ErrorLib('Error finding and counting data ' + error.message);
+            throw new ErrorLib('Error finding and counting data ' + error.message, 500);
         }
     }
 
@@ -141,7 +141,7 @@ export default class DBAdapter {
             return await this.db(table).select(columnName).groupBy(columnName).limit(limit);
         }
         catch (error) {
-            throw new ErrorLib('Error finding and groupingBy data ' + error.message);
+            throw new ErrorLib('Error finding and groupingBy data ' + error.message, 500);
         }
     }
 
@@ -151,7 +151,7 @@ export default class DBAdapter {
             return await this.db(table).select(columnName).orderByRaw(columnName).limit(limit);
         }
         catch (error) {
-            throw new ErrorLib('Error finding and orderByRaw data ' + error.message);
+            throw new ErrorLib('Error finding and orderByRaw data ' + error.message, 500);
         }
     }
 
@@ -161,7 +161,7 @@ export default class DBAdapter {
             return await this.db(table).select('*').orderBy(columnName, order).limit(limit);
         }
         catch (error) {
-            throw new ErrorLib('Error finding and orderBy data ' + error.message);
+            throw new ErrorLib('Error finding and orderBy data ' + error.message, 500);
         }
     }
 
@@ -171,7 +171,7 @@ export default class DBAdapter {
             return await this.db(table).whereIn(columnName,data);
         }
         catch (error) {
-            throw new ErrorLib('Error finding data WhereIn ' + error.message);
+            throw new ErrorLib('Error finding data WhereIn ' + error.message, 500);
         }
     }
 
@@ -181,7 +181,7 @@ export default class DBAdapter {
             return await this.db(table).whereRaw(query);
         }
         catch (error) {
-            throw new ErrorLib('Error finding data findWhereRaw ' + error.message);
+            throw new ErrorLib('Error finding data findWhereRaw ' + error.message, 500);
         }
     }
 
@@ -191,7 +191,7 @@ export default class DBAdapter {
             return await this.db(table).whereIn(columnName,data).where(options);
         }
         catch (error) {
-            throw new ErrorLib('Error finding data WhereIn Options ' + error.message);
+            throw new ErrorLib('Error finding data WhereIn Options ' + error.message, 500);
         }
     }
     async findWhereInOptionsPaginate(table, columnName, data= [], options = {}, limit, page){
@@ -203,7 +203,7 @@ export default class DBAdapter {
             };
         }
         catch (error) {
-            throw new ErrorLib('Error finding data findWhereInOptionsPaginate ' + error.message);
+            throw new ErrorLib('Error finding data findWhereInOptionsPaginate ' + error.message, 500);
         }
     }
 
@@ -213,7 +213,7 @@ export default class DBAdapter {
             const result = await this.db(table).sum(columnName).where(options);
             return result[Object.keys(result)[0]];
         } catch (error) {
-            throw new ErrorLib('Error occurred while getting total: ' + error.message);
+            throw new ErrorLib('Error occurred while getting total: ' + error.message, 500);
         }
     }
 
@@ -222,7 +222,7 @@ export default class DBAdapter {
             LoggerLib.log('queryRaw', {table, columnName, operator, value});
             return await this.db(table).where(columnName, operator, value);
         }catch (error) {
-            throw new ErrorLib('Error occurred while getting Raw Query: ' + error.message);
+            throw new ErrorLib('Error occurred while getting Raw Query: ' + error.message, 500);
         }
     }
 
@@ -231,7 +231,7 @@ export default class DBAdapter {
             LoggerLib.log('whereBetween', {table, columnName, options});
             return await this.db(table).whereBetween(columnName,options);
         }catch (error) {
-            throw new ErrorLib('Error occurred while getting whereBetween: ' + error.message);
+            throw new ErrorLib('Error occurred while getting whereBetween: ' + error.message, 500);
         }
     }
 
@@ -240,7 +240,7 @@ export default class DBAdapter {
             LoggerLib.log('distinctCrossJoinRaw', {table, rawQuery});
             return await this.db(table).joinRaw(rawQuery).distinct(columnName1, columnName2);
         }catch (error) {
-            throw new ErrorLib('Error occurred while getting Distinct Cross Join Raw: ' + error.message);
+            throw new ErrorLib('Error occurred while getting Distinct Cross Join Raw: ' + error.message, 500);
         }
     }
 
@@ -250,7 +250,7 @@ export default class DBAdapter {
             return await this.db(table).where(options).del();
         }
         catch (error) {
-            throw new ErrorLib('Error deleting data' + error.message);
+            throw new ErrorLib('Error deleting data' + error.message, 500);
         }
     }
 }

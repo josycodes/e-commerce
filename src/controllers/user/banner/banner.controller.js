@@ -11,7 +11,7 @@ export const banners = async (req, res, next) => {
     try {
         const banners = await bannerService.allBanners();
         const category_banners = await categoryBannerService.allBanners();
-        const countdown_banners = await countdownBannerService.allBanners();
+        const countdown_banners = await countdownBannerService.getBanner();
         return new ResponseLib(req, res).json({
             status: true,
             data: {

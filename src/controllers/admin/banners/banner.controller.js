@@ -18,22 +18,42 @@ export const updateMainBanner = async (req, res, next) => {
                     message: "Error Parsing form"
                 });
             }
-            const { main_text, caption, charge, button_label } = fields;
-            const { image } = files;
+            const { desktop_image, tablet_image, mobile_image } = files;
 
-            if (!main_text || !button_label || !image) {
+            if (!desktop_image || !tablet_image || !mobile_image) {
                 return res.status(400).json({
                     status:false,
-                    message: "Missing required fields: main_text, button_label and Image"
+                    message: "Missing required fields: desktop_image, tablet_image and mobile_image"
                 });
             }
-            let url = null;
+            let desktop_url = null;
+            let tablet_url = null;
+            let mobile_url = null;
 
-            await CloudinaryIntegration.upload(image[0].filepath, function (error, result) {
+            //Desktop
+            await CloudinaryIntegration.upload(desktop_image[0].filepath, function (error, result) {
                 if (error) {
                     next(error);
                 } else {
-                    url = result.secure_url
+                    desktop_url = result.secure_url
+                }
+            });
+
+            //Tablet
+            await CloudinaryIntegration.upload(tablet_image[0].filepath, function (error, result) {
+                if (error) {
+                    next(error);
+                } else {
+                    tablet_url = result.secure_url
+                }
+            });
+
+            //mobile
+            await CloudinaryIntegration.upload(mobile_image[0].filepath, function (error, result) {
+                if (error) {
+                    next(error);
+                } else {
+                    mobile_url = result.secure_url
                 }
             });
 
@@ -41,11 +61,9 @@ export const updateMainBanner = async (req, res, next) => {
                 banner_type: 'main'
             },{
                 banner_type: 'main',
-                main_text: main_text[0],
-                caption: caption[0],
-                image: url,
-                charge: charge[0],
-                button_label: button_label[0]
+                desktop_image: desktop_url,
+                tablet_image: tablet_url,
+                mobile_image: mobile_url,
             });
 
             return new ResponseLib(req, res).json({
@@ -70,38 +88,60 @@ export const updateSubBanner = async (req, res, next) => {
                     message: "Error Parsing form"
                 });
             }
-            const { main_text, caption, banner_id } = fields;
-            const { image } = files;
 
-            if (!main_text || !image) {
-                return res.status(400).json({
-                    status:false,
-                    message: "Missing required fields: main_text, Image"
-                });
-            }
+            const { banner_id } = fields;
+            const { desktop_image, tablet_image, mobile_image } = files;
+
             const check = await bannerService.findBanner({id: banner_id[0]});
             if(check.banner_type !== 'sub'){
                 return next(new BadRequest('Must be a Sub Banner'));
             }
 
-            let url = null;
+            if (!desktop_image || !tablet_image || !mobile_image) {
+                return res.status(400).json({
+                    status:false,
+                    message: "Missing required fields: desktop_image, tablet_image and mobile_image"
+                });
+            }
 
-            await CloudinaryIntegration.upload(image[0].filepath, function (error, result) {
+            let desktop_url = null;
+            let tablet_url = null;
+            let mobile_url = null;
+
+            //Desktop
+            await CloudinaryIntegration.upload(desktop_image[0].filepath, function (error, result) {
                 if (error) {
                     next(error);
                 } else {
-                    url = result.secure_url
+                    desktop_url = result.secure_url
                 }
             });
 
+            //Tablet
+            await CloudinaryIntegration.upload(tablet_image[0].filepath, function (error, result) {
+                if (error) {
+                    next(error);
+                } else {
+                    tablet_url = result.secure_url
+                }
+            });
+
+            //mobile
+            await CloudinaryIntegration.upload(mobile_image[0].filepath, function (error, result) {
+                if (error) {
+                    next(error);
+                } else {
+                    mobile_url = result.secure_url
+                }
+            });
 
             const updatedBanner = await bannerService.updateBanner({
                 id: banner_id[0]
             },{
                 banner_type: 'sub',
-                main_text: main_text[0],
-                caption: caption[0],
-                image: url
+                desktop_image: desktop_url,
+                tablet_image: tablet_url,
+                mobile_image: mobile_url
             });
 
             return new ResponseLib(req, res).json({
@@ -126,13 +166,13 @@ export const updateCategoryBanner = async (req, res, next) => {
                     message: "Error Parsing form"
                 });
             }
-            const { category_id, charge, banner_id } = fields;
-            const { image } = files;
+            const { category_id, banner_id } = fields;
+            const { desktop_image, tablet_image, mobile_image } = files;
 
-            if (!category_id || !charge || !image || !banner_id) {
+            if (!category_id || !desktop_image || !tablet_image || !mobile_image || !banner_id) {
                 return res.status(400).json({
                     status:false,
-                    message: "Missing required fields: Category_id, Image,Banner_id and Charge"
+                    message: "Missing required fields: category_id, desktop_image, tablet_image, mobile_image and banner_id"
                 });
             }
             const check = await categoryBannerService.findBanner({id: banner_id[0]});
@@ -140,13 +180,34 @@ export const updateCategoryBanner = async (req, res, next) => {
                 return next(new BadRequest('Banner not found'));
             }
 
-            let url = null;
+            let desktop_url = null;
+            let tablet_url = null;
+            let mobile_url = null;
 
-            await CloudinaryIntegration.upload(image[0].filepath, function (error, result) {
+            //Desktop
+            await CloudinaryIntegration.upload(desktop_image[0].filepath, function (error, result) {
                 if (error) {
                     next(error);
                 } else {
-                    url = result.secure_url
+                    desktop_url = result.secure_url
+                }
+            });
+
+            //Tablet
+            await CloudinaryIntegration.upload(tablet_image[0].filepath, function (error, result) {
+                if (error) {
+                    next(error);
+                } else {
+                    tablet_url = result.secure_url
+                }
+            });
+
+            //mobile
+            await CloudinaryIntegration.upload(mobile_image[0].filepath, function (error, result) {
+                if (error) {
+                    next(error);
+                } else {
+                    mobile_url = result.secure_url
                 }
             });
 
@@ -154,8 +215,10 @@ export const updateCategoryBanner = async (req, res, next) => {
                 id: banner_id[0]
             },{
                 category_id: category_id[0],
-                pricing: charge[0],
-                image: url
+                desktop_image: desktop_url,
+                tablet_image: tablet_url,
+                mobile_image: mobile_url,
+                status: 'active'
             });
 
             return new ResponseLib(req, res).json({
@@ -172,7 +235,6 @@ export const updateCategoryBanner = async (req, res, next) => {
 export const updateCountdownBanner = async (req, res, next) => {
     const countdownBannerService = new CountdownBannerService();
     try {
-
 
         const { main_text, caption, start_date, end_date } = req.body;
         console.log(req.body);
@@ -204,7 +266,7 @@ export const allBanners = async (req, res, next) => {
     try {
         const banners = await bannerService.allBanners();
         const category_banners = await categoryBannerService.allBanners();
-        const countdown_banners = await countdownBannerService.allBanners();
+        const countdown_banners = await countdownBannerService.getBanner();
         return new ResponseLib(req, res).json({
             status: true,
             data: {
