@@ -2,7 +2,7 @@ import express from "express";
 import {celebrate, Segments} from "celebrate";
 import Joi from "joi";
 import {
-    addShippingMethod,
+    addShippingMethod, deleteShippingMethod,
     listMethods,
     updateShippingConditions,
     updateShippingStatus
@@ -92,8 +92,7 @@ router.post('/update/status/:shipping_method_id',
     celebrate({
         [Segments.PARAMS]: Joi.object({
             shipping_method_id: Joi.number()
-        })}),
-    celebrate({
+        }),
         [Segments.BODY]: Joi.object({
             status: Joi.boolean().required()
         }),
@@ -101,5 +100,12 @@ router.post('/update/status/:shipping_method_id',
 );
 
 router.get('/list', listMethods);
+
+router.delete('/remove/:shipping_method_id',
+    celebrate({
+        [Segments.PARAMS]: Joi.object({
+            shipping_method_id: Joi.number()
+        })
+    }), deleteShippingMethod);
 
 export default router;

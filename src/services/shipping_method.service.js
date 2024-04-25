@@ -24,6 +24,9 @@ export default class ShippingMethodService {
     async updateShippingMethod(options, data){
         return await this.dbInstance.updateAndFetch(this.table, options, data);
     }
+    async deleteShippingMethod(options){
+        return await this.dbInstance.delete(this.table, options);
+    }
 
     async findShippingMethod(options){
         return await this.dbInstance.findOne(this.table, options);
@@ -34,6 +37,14 @@ export default class ShippingMethodService {
             return await this.shippingLocationConditionService.getShippingConditions(options);
         }else if(method_type === SHIPPING_METHODS.FLAT_RATE){
             return await this.shippingFlatRateConditionService.getShippingConditions(options);
+        }
+    }
+
+    async deleteShippingMethodConditions(method_type,options){
+        if(method_type === SHIPPING_METHODS.LOCATION_BASED){
+            return await this.shippingLocationConditionService.deleteShippingConditions(options);
+        }else if(method_type === SHIPPING_METHODS.FLAT_RATE){
+            return await this.shippingFlatRateConditionService.deleteShippingConditions(options);
         }
     }
 

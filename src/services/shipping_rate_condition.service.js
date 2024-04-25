@@ -19,4 +19,8 @@ export default class ShippingFlatRateConditionService {
     async getShippingConditions(options){
         return await this.dbInstance.findAll(this.table, options);
     }
+
+    async deleteShippingConditions(options){
+        return await this.dbInstance.delete(this.table, options);
+    }
 }

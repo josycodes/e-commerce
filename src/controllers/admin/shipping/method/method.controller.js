@@ -146,12 +146,38 @@ export const updateShippingStatus = async (req, res, next) => {
     }
 }
 
+export const deleteShippingMethod = async (req, res, next) => {
+    const shippingMethodService = new ShippingMethodService();
+    try{
+        const { shipping_method_id } = req.params;
+
+        const shipping_method = await shippingMethodService.findShippingMethod({id: shipping_method_id});
+        if(!shipping_method) throw new NotFound('Shipping Method not Found');
+
+        await shippingMethodService.deleteShippingMethodConditions(shipping_method.type, {
+            shipping_method_id: shipping_method.id
+        })
+
+        await shippingMethodService.deleteShippingMethod({id: shipping_method_id});
+
+        return new ResponseLib(req, res).json({
+            status: true,
+            message: "Shipping Method Deleted Successfully",
+        });
+    } catch (error) {
+        if (error instanceof NotFound || error instanceof BadRequest || error instanceof ErrorLib) {
+            return next(error);
+        }
+        next(error)
+    }
+}
+
 export const listMethods = async (req, res, next) => {
     const shippingMethodService = new ShippingMethodService();
     try{
         const shipping_methods = await shippingMethodService.getShippingMethods();
         const MethodsDTO = await Promise.all(shipping_methods.map(async (shipping_method) => {
-            return ShippingMethodMapper.toDTO({...shipping_method})
+            return ShippingMethodMapper.toDTO2({...shipping_method})
         }) )
 
         return new ResponseLib(req, res).json({
